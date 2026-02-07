@@ -5,11 +5,13 @@
  * pagination, sorting, and row selection.
  */
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { AppLayout, Sidebar, PageHeader } from './components/layout';
 import { StatsRow, Toolbar, Pagination, type ToolbarFilters } from './components/dashboard';
 import { DataTable, type SortConfig, type SortColumn } from './components/table';
+import { DetailPanel } from './components/detail';
 import { useIndicators } from './hooks/useIndicators';
+import { useIndicator } from './hooks/useIndicator';
 import { useDebounce } from './hooks/useDebounce';
 import type { IndicatorType, Severity, Indicator } from './types/indicator';
 
@@ -173,6 +175,30 @@ function App() {
     setPage(newPage);
   }, []);
 
+  const handleClosePanel = useCallback(() => {
+    setSelectedId(null);
+  }, []);
+
+  // Fetch selected indicator details
+  const {
+    indicator: selectedIndicator,
+    loading: indicatorLoading,
+    error: indicatorError,
+    refetch: refetchIndicator,
+  } = useIndicator(selectedId);
+
+  // Handle Escape key to close panel
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedId) {
+        handleClosePanel();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [selectedId, handleClosePanel]);
+
   return (
     <AppLayout>
       <Sidebar />
@@ -219,6 +245,17 @@ function App() {
           onPageChange={handlePageChange}
         />
       </main>
+
+      {/* Detail Panel */}
+      {selectedId && (
+        <DetailPanel
+          indicator={selectedIndicator}
+          loading={indicatorLoading}
+          error={indicatorError}
+          onClose={handleClosePanel}
+          onRetry={refetchIndicator}
+        />
+      )}
     </AppLayout>
   );
 }
