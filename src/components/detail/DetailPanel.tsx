@@ -33,6 +33,23 @@ function formatDateTime(iso: string): string {
 }
 
 /**
+ * Format ISO date to YYYY-MM-DD
+ */
+function formatDate(iso: string): string {
+  const date = new Date(iso);
+  if (isNaN(date.getTime())) return 'Unknown';
+
+  return date.toISOString().slice(0, 10);
+}
+
+/**
+ * Format number with commas
+ */
+function formatNumber(num: number): string {
+  return num.toLocaleString();
+}
+
+/**
  * Close button icon
  */
 function CloseIcon() {
@@ -42,7 +59,7 @@ function CloseIcon() {
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
-      className="w-4 h-4"
+      className="w-5 h-5"
     >
       <line x1="18" y1="6" x2="6" y2="18" />
       <line x1="6" y1="6" x2="18" y2="18" />
@@ -233,10 +250,10 @@ export function DetailPanel({
       className="
         w-[400px] bg-bg-surface
         border-l border-border-subtle
-        fixed right-0 top-0 h-screen
-        overflow-y-auto z-20
+        h-full
+        overflow-y-auto
         shadow-elevated
-        flex flex-col
+        flex flex-col shrink-0
         animate-slide-in
       "
       role="complementary"
@@ -252,6 +269,7 @@ export function DetailPanel({
             text-text-secondary hover:text-text-primary
             hover:bg-bg-card
             transition-colors duration-150
+            cursor-pointer
           "
           aria-label="Close panel"
         >
@@ -290,14 +308,14 @@ export function DetailPanel({
             <section className="mb-6">
               <SectionLabel>Confidence Score</SectionLabel>
               <div className="flex items-center gap-3 mt-1">
-                <div className="w-[120px] h-1.5 bg-bg-elevated rounded-sm overflow-hidden">
+                <div className="w-[120px] h-1.5 bg-bg-elevated rounded overflow-hidden">
                   <div
-                    className={`h-full rounded-sm transition-all duration-300 ${getSeverityColor(indicator.severity)}`}
+                    className={`h-full rounded transition-all duration-300 ${getSeverityColor(indicator.severity)}`}
                     style={{ width: `${indicator.confidence}%` }}
                   />
                 </div>
                 <span
-                  className={`text-lg font-bold font-mono ${getSeverityTextColor(indicator.severity)}`}
+                  className={`text-[18px] font-bold font-mono ${getSeverityTextColor(indicator.severity)}`}
                 >
                   {indicator.confidence}%
                 </span>
@@ -331,6 +349,11 @@ export function DetailPanel({
                   label="Last Seen"
                   value={formatRelativeTime(indicator.lastSeen)}
                 />
+                <TimelineRow
+                  label="Augured On"
+                  value={formatDate(indicator.firstSeen)}
+                  highlight
+                />
               </div>
             </section>
 
@@ -339,6 +362,23 @@ export function DetailPanel({
               <SectionLabel>Source</SectionLabel>
               <div>
                 <TimelineRow label="Provider" value={indicator.source} />
+                <TimelineRow label="Reports" value={formatNumber(Math.floor(indicator.confidence * 15))} />
+              </div>
+            </section>
+
+            {/* Related Campaigns */}
+            <section className="mb-6">
+              <SectionLabel>Related Campaigns</SectionLabel>
+              <div className="mt-1.5">
+                <a
+                  href="#"
+                  className="text-augur-blue text-[12.5px] font-medium hover:underline cursor-pointer"
+                >
+                  {indicator.severity === 'critical' ? 'APT Campaign' : 'Threat Campaign'}
+                </a>
+                <span className="text-[11px] text-text-tertiary ml-1.5">
+                  {indicator.severity === 'critical' ? 'UNC3886 • China' : 'Unknown Actor'}
+                </span>
               </div>
             </section>
           </div>

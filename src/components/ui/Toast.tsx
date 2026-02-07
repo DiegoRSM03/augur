@@ -97,7 +97,7 @@ function Toast({ toast, onDismiss }: ToastProps) {
       <span className="text-sm text-text-primary">{toast.message}</span>
       <button
         onClick={() => onDismiss(toast.id)}
-        className="ml-2 text-text-tertiary hover:text-text-secondary transition-colors"
+        className="ml-2 text-text-tertiary hover:text-text-secondary transition-colors cursor-pointer"
         aria-label="Dismiss"
       >
         <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

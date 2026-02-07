@@ -70,7 +70,7 @@ export function TableRow({
 
       {/* Type */}
       <td className="px-4 py-3">
-        <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase text-text-secondary tracking-wide">
+        <span className="inline-flex items-center gap-1 text-[11px] font-semibold uppercase text-text-secondary tracking-wide whitespace-nowrap">
           {getTypeIcon(indicator.type)} {getTypeLabel(indicator.type)}
         </span>
       </td>

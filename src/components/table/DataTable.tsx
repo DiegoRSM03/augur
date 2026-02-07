@@ -136,7 +136,7 @@ function ErrorState({
             {onRetry && (
               <button
                 onClick={onRetry}
-                className="text-augur-blue hover:underline text-sm"
+                className="text-augur-blue hover:underline text-sm cursor-pointer"
               >
                 Try again
               </button>

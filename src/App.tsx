@@ -306,44 +306,50 @@ function App() {
           selectedCount={selectedCount}
         />
 
-        {/* Data Table */}
-        <DataTable
-          data={sortedData}
-          loading={loading}
-          error={error}
-          selectedIds={selectedIds}
-          activeRowId={activeRowId}
-          sortConfig={sortConfig}
-          onSort={handleSort}
-          onSelectRow={handleSelectRow}
-          onRowClick={handleRowClick}
-          onSelectAll={handleSelectAll}
-          allSelected={allSelected}
-          someSelected={someSelected}
-          onClearFilters={handleClearFilters}
-          onRetry={refetch}
-        />
+        {/* Data Table + Detail Panel Container */}
+        <div className="flex flex-1">
+          {/* Content Area (Table + Pagination) */}
+          <div className="flex flex-col flex-1 relative">
+            {/* Data Table */}
+            <DataTable
+              data={sortedData}
+              loading={loading}
+              error={error}
+              selectedIds={selectedIds}
+              activeRowId={activeRowId}
+              sortConfig={sortConfig}
+              onSort={handleSort}
+              onSelectRow={handleSelectRow}
+              onRowClick={handleRowClick}
+              onSelectAll={handleSelectAll}
+              allSelected={allSelected}
+              someSelected={someSelected}
+              onClearFilters={handleClearFilters}
+              onRetry={refetch}
+            />
 
-        {/* Pagination */}
-        <Pagination
-          page={page}
-          totalPages={totalPages}
-          total={total}
-          limit={PAGE_LIMIT}
-          onPageChange={handlePageChange}
-        />
+            {/* Pagination */}
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              total={total}
+              limit={PAGE_LIMIT}
+              onPageChange={handlePageChange}
+            />
+          </div>
+
+          {/* Detail Panel */}
+          {activeRowId && (
+            <DetailPanel
+              indicator={activeIndicator}
+              loading={indicatorLoading}
+              error={indicatorError}
+              onClose={handleClosePanel}
+              onRetry={refetchIndicator}
+            />
+          )}
+        </div>
       </main>
-
-      {/* Detail Panel */}
-      {activeRowId && (
-        <DetailPanel
-          indicator={activeIndicator}
-          loading={indicatorLoading}
-          error={indicatorError}
-          onClose={handleClosePanel}
-          onRetry={refetchIndicator}
-        />
-      )}
 
       {/* Export Modal */}
       {isExportModalOpen && (

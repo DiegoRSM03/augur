@@ -127,6 +127,7 @@ export function ExportModal({ indicators, onClose, onExport }: ExportModalProps)
               text-text-tertiary hover:text-text-primary
               hover:bg-bg-card
               transition-colors
+              cursor-pointer
             "
             aria-label="Close modal"
           >
@@ -183,6 +184,7 @@ export function ExportModal({ indicators, onClose, onExport }: ExportModalProps)
                 rounded-md
                 hover:bg-bg-card hover:border-border-hover
                 transition-colors
+                cursor-pointer
               "
             >
               Cancel
@@ -198,6 +200,7 @@ export function ExportModal({ indicators, onClose, onExport }: ExportModalProps)
                 border border-augur-blue
                 rounded-md
                 hover:brightness-110
+                cursor-pointer
                 disabled:opacity-50 disabled:cursor-not-allowed
                 transition-all
               "

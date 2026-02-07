@@ -50,7 +50,7 @@ function StatsRowError({ message, onRetry }: { message: string; onRetry: () => v
         <p className="text-text-tertiary text-sm mb-4">{message}</p>
         <button
           onClick={onRetry}
-          className="text-augur-blue hover:underline text-sm"
+          className="text-augur-blue hover:underline text-sm cursor-pointer"
         >
           Try again
         </button>
