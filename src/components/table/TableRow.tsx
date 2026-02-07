@@ -5,27 +5,35 @@ import { formatRelativeTime, getTagColor, getTypeIcon, getTypeLabel } from '../.
 interface TableRowProps {
   indicator: Indicator;
   isSelected: boolean;
-  onSelect: (id: string) => void;
+  isActive?: boolean;
+  onSelect: (indicator: Indicator) => void;
   onClick: (id: string) => void;
 }
 
 /**
  * Table row component for displaying a single indicator
+ * 
+ * - isSelected: checkbox is checked (multi-select for export)
+ * - isActive: row is highlighted because detail panel is open
  */
 export function TableRow({
   indicator,
   isSelected,
+  isActive = false,
   onSelect,
   onClick,
 }: TableRowProps) {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
-    onSelect(indicator.id);
+    onSelect(indicator);
   };
 
   const handleRowClick = () => {
     onClick(indicator.id);
   };
+
+  // Row is highlighted if selected (checkbox) OR active (detail panel open)
+  const isHighlighted = isSelected || isActive;
 
   return (
     <tr
@@ -33,7 +41,7 @@ export function TableRow({
         border-b border-border-subtle
         transition-colors duration-100
         cursor-pointer
-        ${isSelected ? 'bg-augur-blue-dim' : 'hover:bg-bg-card-hover'}
+        ${isHighlighted ? 'bg-augur-blue-dim' : 'hover:bg-bg-card-hover'}
       `}
       onClick={handleRowClick}
     >

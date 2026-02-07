@@ -1,3 +1,5 @@
+import React from 'react';
+
 export type SortColumn =
   | 'indicator'
   | 'type'
@@ -18,6 +20,7 @@ interface TableHeaderProps {
   onSort: (column: SortColumn) => void;
   showCheckbox?: boolean;
   allSelected?: boolean;
+  someSelected?: boolean;
   onSelectAll?: () => void;
 }
 
@@ -60,6 +63,37 @@ function SortIcon({
 }
 
 /**
+ * Checkbox with indeterminate state support
+ */
+function IndeterminateCheckbox({
+  checked,
+  indeterminate,
+  onChange,
+}: {
+  checked: boolean;
+  indeterminate: boolean;
+  onChange?: () => void;
+}) {
+  const ref = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current.indeterminate = indeterminate;
+    }
+  }, [indeterminate]);
+
+  return (
+    <input
+      ref={ref}
+      type="checkbox"
+      checked={checked}
+      onChange={onChange}
+      className="accent-augur-blue cursor-pointer"
+    />
+  );
+}
+
+/**
  * Table header component with sortable columns
  */
 export function TableHeader({
@@ -67,6 +101,7 @@ export function TableHeader({
   onSort,
   showCheckbox = true,
   allSelected = false,
+  someSelected = false,
   onSelectAll,
 }: TableHeaderProps) {
   return (
@@ -81,11 +116,10 @@ export function TableHeader({
                 className="px-4 py-3 text-left border-b border-border"
                 style={{ width: column.width }}
               >
-                <input
-                  type="checkbox"
+                <IndeterminateCheckbox
                   checked={allSelected}
+                  indeterminate={someSelected && !allSelected}
                   onChange={onSelectAll}
-                  className="accent-augur-blue"
                 />
               </th>
             );

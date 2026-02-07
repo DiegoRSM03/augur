@@ -3,6 +3,7 @@ import { Button } from '../ui';
 interface PageHeaderProps {
   title: string;
   subtitle: string;
+  onExport?: () => void;
 }
 
 // Live status dot component
@@ -32,7 +33,7 @@ const PlusIcon = () => (
   </svg>
 );
 
-export function PageHeader({ title, subtitle }: PageHeaderProps) {
+export function PageHeader({ title, subtitle, onExport }: PageHeaderProps) {
   return (
     <header className="px-8 py-6 border-b border-border-subtle flex items-center justify-between bg-bg-surface sticky top-0 z-10">
       {/* Left side: Title and subtitle */}
@@ -44,7 +45,7 @@ export function PageHeader({ title, subtitle }: PageHeaderProps) {
       {/* Right side: Live indicator and action buttons */}
       <div className="flex items-center gap-3">
         <LiveIndicator />
-        <Button variant="secondary" size="sm">
+        <Button variant="secondary" size="sm" onClick={onExport}>
           <DownloadIcon />
           Export
         </Button>

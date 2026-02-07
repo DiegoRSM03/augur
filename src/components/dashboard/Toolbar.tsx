@@ -16,6 +16,7 @@ interface ToolbarProps {
   onSourceChange: (value: string) => void;
   onClearFilters: () => void;
   sources?: string[];
+  selectedCount?: number;
 }
 
 /**
@@ -55,6 +56,26 @@ const typeOptions = [
 /**
  * Toolbar component with search and filter controls
  */
+/**
+ * Selection count badge component
+ */
+function SelectionBadge({ count }: { count: number }) {
+  return (
+    <span
+      className="
+        inline-flex items-center
+        px-2.5 py-1
+        text-xs font-semibold
+        text-augur-blue
+        bg-augur-blue-dim
+        rounded-full
+      "
+    >
+      {count} selected
+    </span>
+  );
+}
+
 export function Toolbar({
   filters,
   onSearchChange,
@@ -63,6 +84,7 @@ export function Toolbar({
   onSourceChange,
   onClearFilters,
   sources = [],
+  selectedCount = 0,
 }: ToolbarProps) {
   const sourceOptions = [
     { value: '', label: 'All Sources' },
@@ -109,8 +131,9 @@ export function Toolbar({
         />
       </div>
 
-      {/* Clear filters button (right-aligned) */}
-      <div className="ml-auto">
+      {/* Selection count badge and clear filters (right-aligned) */}
+      <div className="ml-auto flex items-center gap-3">
+        {selectedCount > 0 && <SelectionBadge count={selectedCount} />}
         {hasActiveFilters && (
           <Button variant="ghost" size="sm" onClick={onClearFilters}>
             Clear filters

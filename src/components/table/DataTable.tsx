@@ -7,11 +7,15 @@ interface DataTableProps {
   data: Indicator[];
   loading: boolean;
   error: Error | null;
-  selectedId: string | null;
+  selectedIds: Set<string>;
+  activeRowId: string | null;
   sortConfig: SortConfig;
   onSort: (column: SortColumn) => void;
-  onSelectRow: (id: string) => void;
+  onSelectRow: (indicator: Indicator) => void;
   onRowClick: (id: string) => void;
+  onSelectAll?: () => void;
+  allSelected?: boolean;
+  someSelected?: boolean;
   onClearFilters?: () => void;
   onRetry?: () => void;
 }
@@ -151,11 +155,15 @@ export function DataTable({
   data,
   loading,
   error,
-  selectedId,
+  selectedIds,
+  activeRowId,
   sortConfig,
   onSort,
   onSelectRow,
   onRowClick,
+  onSelectAll,
+  allSelected = false,
+  someSelected = false,
   onClearFilters,
   onRetry,
 }: DataTableProps) {
@@ -178,7 +186,8 @@ export function DataTable({
           <TableRow
             key={indicator.id}
             indicator={indicator}
-            isSelected={selectedId === indicator.id}
+            isSelected={selectedIds.has(indicator.id)}
+            isActive={activeRowId === indicator.id}
             onSelect={onSelectRow}
             onClick={onRowClick}
           />
@@ -194,6 +203,9 @@ export function DataTable({
           sortConfig={sortConfig}
           onSort={onSort}
           showCheckbox={true}
+          allSelected={allSelected}
+          someSelected={someSelected}
+          onSelectAll={onSelectAll}
         />
         {renderBody()}
       </table>

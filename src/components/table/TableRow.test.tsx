@@ -105,14 +105,14 @@ describe('TableRow', () => {
     expect(onClick).toHaveBeenCalledWith('test-id-1');
   });
 
-  it('calls onSelect when checkbox is clicked', () => {
+  it('calls onSelect with full indicator when checkbox is clicked', () => {
     const onSelect = vi.fn();
     renderTableRow({ onSelect });
 
     const checkbox = screen.getByRole('checkbox');
     fireEvent.click(checkbox);
 
-    expect(onSelect).toHaveBeenCalledWith('test-id-1');
+    expect(onSelect).toHaveBeenCalledWith(mockIndicator);
   });
 
   it('does not trigger row click when checkbox is clicked', () => {
@@ -123,7 +123,7 @@ describe('TableRow', () => {
     const checkbox = screen.getByRole('checkbox');
     fireEvent.click(checkbox);
 
-    expect(onSelect).toHaveBeenCalledWith('test-id-1');
+    expect(onSelect).toHaveBeenCalledWith(mockIndicator);
     expect(onClick).not.toHaveBeenCalled();
   });
 

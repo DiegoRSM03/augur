@@ -2,7 +2,7 @@
  * Threat Intelligence Dashboard
  *
  * Main application component with state management for filters,
- * pagination, sorting, and row selection.
+ * pagination, sorting, row selection, and export functionality.
  */
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
@@ -10,9 +10,14 @@ import { AppLayout, Sidebar, PageHeader } from './components/layout';
 import { StatsRow, Toolbar, Pagination, type ToolbarFilters } from './components/dashboard';
 import { DataTable, type SortConfig, type SortColumn } from './components/table';
 import { DetailPanel } from './components/detail';
+import { ExportModal } from './components/export';
+import { ToastContainer } from './components/ui';
 import { useIndicators } from './hooks/useIndicators';
 import { useIndicator } from './hooks/useIndicator';
 import { useDebounce } from './hooks/useDebounce';
+import { useSelection } from './hooks/useSelection';
+import { useToast } from './hooks/useToast';
+import { exportIndicatorsToCsv } from './utils/exportCsv';
 import type { IndicatorType, Severity, Indicator } from './types/indicator';
 
 // Default limit per page
@@ -89,8 +94,25 @@ function App() {
     direction: 'desc',
   });
 
-  // Selected row state
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  // Active row state (for detail panel)
+  const [activeRowId, setActiveRowId] = useState<string | null>(null);
+
+  // Export modal state
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+
+  // Multi-select state (for export) - stores full indicator objects
+  const {
+    selectedIds,
+    selectedArray,
+    selectedCount,
+    toggleSelection,
+    clearSelection,
+    getPageSelectionState,
+    toggleAllOnPage,
+  } = useSelection();
+
+  // Toast notifications
+  const { toasts, showToast, dismissToast } = useToast();
 
   // Debounce search input
   const debouncedSearch = useDebounce(filters.search, 300);
@@ -129,6 +151,18 @@ function App() {
     [filteredData, sortConfig]
   );
 
+  // Get current page IDs for select all functionality
+  const currentPageIds = useMemo(
+    () => sortedData.map((indicator) => indicator.id),
+    [sortedData]
+  );
+
+  // Get page selection state
+  const { allSelected, someSelected } = useMemo(
+    () => getPageSelectionState(currentPageIds),
+    [getPageSelectionState, currentPageIds]
+  );
+
   // Handlers
   const handleSearchChange = useCallback((value: string) => {
     setFilters((prev) => ({ ...prev, search: value }));
@@ -163,41 +197,89 @@ function App() {
     }));
   }, []);
 
-  const handleSelectRow = useCallback((id: string) => {
-    setSelectedId((prev) => (prev === id ? null : id));
-  }, []);
+  // Handle checkbox selection - needs full indicator object
+  const handleSelectRow = useCallback(
+    (indicator: Indicator) => {
+      toggleSelection(indicator);
+    },
+    [toggleSelection]
+  );
 
   const handleRowClick = useCallback((id: string) => {
-    setSelectedId(id);
+    setActiveRowId(id);
   }, []);
+
+  // Handle select all - needs full indicator objects for current page
+  const handleSelectAll = useCallback(() => {
+    toggleAllOnPage(sortedData);
+  }, [toggleAllOnPage, sortedData]);
 
   const handlePageChange = useCallback((newPage: number) => {
     setPage(newPage);
   }, []);
 
   const handleClosePanel = useCallback(() => {
-    setSelectedId(null);
+    setActiveRowId(null);
   }, []);
+
+  // Export handlers
+  const handleExportClick = useCallback(() => {
+    if (selectedCount === 0) {
+      showToast('No indicators selected', 'info');
+      return;
+    }
+    setIsExportModalOpen(true);
+  }, [selectedCount, showToast]);
+
+  const handleExportModalClose = useCallback(() => {
+    setIsExportModalOpen(false);
+  }, []);
+
+  const handleExport = useCallback(
+    (idsToExport: string[]) => {
+      // Get the indicators to export from selectedArray (stored in memory)
+      const indicatorsToExport = selectedArray.filter((indicator) =>
+        idsToExport.includes(indicator.id)
+      );
+
+      if (indicatorsToExport.length === 0) {
+        showToast('No indicators to export', 'error');
+        return;
+      }
+
+      // Generate and download CSV
+      exportIndicatorsToCsv(indicatorsToExport);
+
+      // Close modal, show toast, clear selections
+      setIsExportModalOpen(false);
+      showToast(
+        `Successfully exported ${indicatorsToExport.length} indicator${indicatorsToExport.length !== 1 ? 's' : ''}`,
+        'success'
+      );
+      clearSelection();
+    },
+    [selectedArray, showToast, clearSelection]
+  );
 
   // Fetch selected indicator details
   const {
-    indicator: selectedIndicator,
+    indicator: activeIndicator,
     loading: indicatorLoading,
     error: indicatorError,
     refetch: refetchIndicator,
-  } = useIndicator(selectedId);
+  } = useIndicator(activeRowId);
 
   // Handle Escape key to close panel
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && selectedId) {
+      if (e.key === 'Escape' && activeRowId && !isExportModalOpen) {
         handleClosePanel();
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [selectedId, handleClosePanel]);
+  }, [activeRowId, isExportModalOpen, handleClosePanel]);
 
   return (
     <AppLayout>
@@ -206,6 +288,7 @@ function App() {
         <PageHeader
           title="Threat Intelligence Dashboard"
           subtitle="Real-time threat indicators and campaign intelligence"
+          onExport={handleExportClick}
         />
 
         {/* Stats Row */}
@@ -220,6 +303,7 @@ function App() {
           onSourceChange={handleSourceChange}
           onClearFilters={handleClearFilters}
           sources={KNOWN_SOURCES}
+          selectedCount={selectedCount}
         />
 
         {/* Data Table */}
@@ -227,11 +311,15 @@ function App() {
           data={sortedData}
           loading={loading}
           error={error}
-          selectedId={selectedId}
+          selectedIds={selectedIds}
+          activeRowId={activeRowId}
           sortConfig={sortConfig}
           onSort={handleSort}
           onSelectRow={handleSelectRow}
           onRowClick={handleRowClick}
+          onSelectAll={handleSelectAll}
+          allSelected={allSelected}
+          someSelected={someSelected}
           onClearFilters={handleClearFilters}
           onRetry={refetch}
         />
@@ -247,15 +335,27 @@ function App() {
       </main>
 
       {/* Detail Panel */}
-      {selectedId && (
+      {activeRowId && (
         <DetailPanel
-          indicator={selectedIndicator}
+          indicator={activeIndicator}
           loading={indicatorLoading}
           error={indicatorError}
           onClose={handleClosePanel}
           onRetry={refetchIndicator}
         />
       )}
+
+      {/* Export Modal */}
+      {isExportModalOpen && (
+        <ExportModal
+          indicators={selectedArray}
+          onClose={handleExportModalClose}
+          onExport={handleExport}
+        />
+      )}
+
+      {/* Toast Notifications */}
+      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
     </AppLayout>
   );
 }
