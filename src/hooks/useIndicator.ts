@@ -1,6 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { fetchIndicatorById } from '../api/indicators';
 import type { Indicator } from '../types/indicator';
+
+interface UseIndicatorOptions {
+  /** Local indicators to check before fetching from API */
+  localIndicators?: Indicator[];
+}
 
 interface UseIndicatorReturn {
   indicator: Indicator | null;
@@ -13,11 +18,24 @@ interface UseIndicatorReturn {
  * Hook for fetching a single indicator by ID
  *
  * @param id - The indicator ID to fetch, or null to skip fetching
+ * @param options - Optional configuration
+ * @param options.localIndicators - Local indicators to check first (for newly added indicators)
  */
-export function useIndicator(id: string | null): UseIndicatorReturn {
+export function useIndicator(
+  id: string | null,
+  options: UseIndicatorOptions = {}
+): UseIndicatorReturn {
+  const { localIndicators = [] } = options;
+
   const [indicator, setIndicator] = useState<Indicator | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  // Check if the indicator exists in local storage
+  const localIndicator = useMemo(() => {
+    if (!id) return null;
+    return localIndicators.find((ind) => ind.id === id) || null;
+  }, [id, localIndicators]);
 
   const loadIndicator = useCallback(async () => {
     if (!id) {
@@ -27,6 +45,15 @@ export function useIndicator(id: string | null): UseIndicatorReturn {
       return;
     }
 
+    // If found in local indicators, use that directly (no API call needed)
+    if (localIndicator) {
+      setIndicator(localIndicator);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    // Otherwise, fetch from API
     setLoading(true);
     setError(null);
 
@@ -39,7 +66,7 @@ export function useIndicator(id: string | null): UseIndicatorReturn {
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, localIndicator]);
 
   useEffect(() => {
     loadIndicator();

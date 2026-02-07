@@ -53,13 +53,6 @@ const TYPE_OPTIONS = [
   { value: 'url', label: 'URL' },
 ];
 
-// Confidence presets based on severity
-const SEVERITY_CONFIDENCE_MAP: Record<Severity, number> = {
-  critical: 90,
-  high: 75,
-  medium: 50,
-  low: 25,
-};
 
 // Form field state
 interface FormState {
@@ -184,13 +177,6 @@ export function AddIndicatorModal({
     }
   }, [form.value, form.type]);
 
-  // Update confidence when severity changes
-  const handleSeverityChange = useCallback((severity: Severity | '') => {
-    setForm((prev) => {
-      const newConfidence = severity ? SEVERITY_CONFIDENCE_MAP[severity] : prev.confidence;
-      return { ...prev, severity, confidence: newConfidence };
-    });
-  }, []);
 
   // Validate form
   const validateForm = useCallback((): boolean => {
@@ -452,7 +438,9 @@ export function AddIndicatorModal({
                 </label>
                 <Select
                   value={form.severity}
-                  onChange={(e) => handleSeverityChange(e.target.value as Severity | '')}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, severity: e.target.value as Severity | '' }))
+                  }
                   onBlur={() => handleBlur('severity')}
                   options={SEVERITY_OPTIONS}
                   placeholder="Select severity..."
@@ -494,9 +482,14 @@ export function AddIndicatorModal({
 
             {/* Tags */}
             <div>
-              <label className="block text-[11px] font-semibold uppercase tracking-wider text-text-tertiary mb-1.5">
-                Tags <span className="text-severity-critical">*</span>
-              </label>
+              <div className="flex items-baseline gap-2 mb-1.5">
+                <label className="text-[11px] font-semibold uppercase tracking-wider text-text-tertiary">
+                  Tags <span className="text-severity-critical">*</span>
+                </label>
+                <span className="text-[10px] text-text-tertiary font-normal normal-case tracking-normal">
+                  Press Enter to add a tag
+                </span>
+              </div>
               <TagInput
                 tags={form.tags}
                 onChange={(tags) => setForm((prev) => ({ ...prev, tags }))}

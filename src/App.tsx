@@ -19,6 +19,7 @@ import { useDebounce } from './hooks/useDebounce';
 import { useSelection } from './hooks/useSelection';
 import { useToast } from './hooks/useToast';
 import { useLocalIndicators } from './hooks/useLocalIndicators';
+import { useLockBodyScroll } from './hooks/useLockBodyScroll';
 import { exportIndicatorsToCsv } from './utils/exportCsv';
 import type { IndicatorType, Severity, Indicator } from './types/indicator';
 
@@ -104,6 +105,9 @@ function App() {
 
   // Add Indicator modal state
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  // Lock body scroll when any modal is open
+  useLockBodyScroll(isExportModalOpen || isAddModalOpen);
 
   // Reference to the table wrapper for scrolling
   const tableWrapperRef = useRef<HTMLDivElement>(null);
@@ -323,7 +327,7 @@ function App() {
     loading: indicatorLoading,
     error: indicatorError,
     refetch: refetchIndicator,
-  } = useIndicator(activeRowId);
+  } = useIndicator(activeRowId, { localIndicators });
 
   // Handle Escape key to close panel
   useEffect(() => {

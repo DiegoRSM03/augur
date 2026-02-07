@@ -154,23 +154,20 @@ describe('AddIndicatorModal', () => {
     );
   });
 
-  it('updates confidence when severity changes', async () => {
+  it('keeps confidence independent from severity', async () => {
     render(<AddIndicatorModal {...defaultProps} />);
+
+    // Default confidence is 50
+    expect(screen.getByText('50')).toBeInTheDocument();
 
     const selects = screen.getAllByRole('combobox');
     const severitySelect = selects[1]!;
 
-    // Select critical - should set confidence to 90
+    // Change severity - confidence should NOT change
     fireEvent.change(severitySelect, { target: { value: 'critical' } });
-    await waitFor(() => {
-      expect(screen.getByText('90')).toBeInTheDocument();
-    });
-
-    // Select low - should set confidence to 25
-    fireEvent.change(severitySelect, { target: { value: 'low' } });
-    await waitFor(() => {
-      expect(screen.getByText('25')).toBeInTheDocument();
-    });
+    
+    // Confidence should still be 50 (unchanged)
+    expect(screen.getByText('50')).toBeInTheDocument();
   });
 
   it('shows validation errors when submitting with empty fields', async () => {

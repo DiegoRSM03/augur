@@ -8,17 +8,17 @@ describe('Slider', () => {
     expect(screen.getByText('75')).toBeInTheDocument();
   });
 
-  it('renders preset buttons by default', () => {
+  it('renders preset stop markers by default', () => {
     render(<Slider value={50} onChange={() => {}} />);
-    expect(screen.getByRole('button', { name: 'Low' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Medium' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'High' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Critical' })).toBeInTheDocument();
+    expect(screen.getByText('25%')).toBeInTheDocument();
+    expect(screen.getByText('50%')).toBeInTheDocument();
+    expect(screen.getByText('75%')).toBeInTheDocument();
+    expect(screen.getByText('100%')).toBeInTheDocument();
   });
 
-  it('hides preset buttons when showPresets is false', () => {
+  it('hides preset markers when showPresets is false', () => {
     render(<Slider value={50} onChange={() => {}} showPresets={false} />);
-    expect(screen.queryByRole('button', { name: 'Low' })).not.toBeInTheDocument();
+    expect(screen.queryByText('25%')).not.toBeInTheDocument();
   });
 
   it('calls onChange when slider value changes', () => {
@@ -31,13 +31,13 @@ describe('Slider', () => {
     expect(onChange).toHaveBeenCalledWith(75);
   });
 
-  it('calls onChange when preset button is clicked', () => {
+  it('calls onChange when preset marker is clicked', () => {
     const onChange = vi.fn();
     render(<Slider value={50} onChange={onChange} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Critical' }));
+    fireEvent.click(screen.getByText('100%'));
 
-    expect(onChange).toHaveBeenCalledWith(90);
+    expect(onChange).toHaveBeenCalledWith(100);
   });
 
   it('applies correct color class for low values (0-39)', () => {
@@ -72,9 +72,9 @@ describe('Slider', () => {
     expect(slider).toHaveAttribute('max', '10');
   });
 
-  it('highlights active preset button', () => {
+  it('highlights active preset marker', () => {
     render(<Slider value={75} onChange={() => {}} />);
-    const highButton = screen.getByRole('button', { name: 'High' });
-    expect(highButton).toHaveClass('bg-bg-card');
+    const label = screen.getByText('75%');
+    expect(label).toHaveClass('text-text-primary');
   });
 });
