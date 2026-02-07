@@ -1,0 +1,71 @@
+---
+description: Vitest and React Testing Library patterns
+globs: "**/*.test.ts,**/*.test.tsx"
+alwaysApply: false
+---
+
+# Testing with Vitest + React Testing Library
+
+## File Organization
+
+- Colocate tests: `Component.tsx` → `Component.test.tsx`
+- Name pattern: `[name].test.ts` or `[name].test.tsx`
+
+## Test Structure (AAA Pattern)
+
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+
+describe('Component', () => {
+it('should render with given props', () => {
+// Arrange
+const props = { value: 'test' };
+
+    // Act
+    render(<Component {...props} />);
+
+    // Assert
+    expect(screen.getByText('test')).toBeInTheDocument();
+
+});
+});
+
+## Async Testing
+
+it('should load data', async () => {
+render(<DataComponent />);
+expect(await screen.findByText('Loaded')).toBeInTheDocument();
+});
+
+// Mock API calls
+vi.mock('../api/indicators', () => ({
+fetchIndicators: vi.fn().mockResolvedValue({ data: [], total: 0 })
+}));
+
+## User Interactions
+
+import userEvent from '@testing-library/user-event';
+
+it('should handle click', async () => {
+const user = userEvent.setup();
+const onClick = vi.fn();
+
+render(<Button onClick={onClick}>Click</Button>);
+await user.click(screen.getByRole('button'));
+
+expect(onClick).toHaveBeenCalledOnce();
+});
+
+## Query Priority (most to least preferred)
+
+1. `getByRole` - accessible queries
+2. `getByLabelText` - form elements
+3. `getByText` - visible text
+4. `getByTestId` - last resort
+
+## Anti-patterns
+
+- ❌ Testing implementation details (internal state)
+- ❌ Snapshot tests for dynamic content
+- ❌ Over-mocking
+- ✅ Test behavior from user perspective

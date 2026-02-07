@@ -1,0 +1,57 @@
+---
+description: React component patterns and TypeScript conventions
+globs: "**/*.tsx"
+alwaysApply: false
+---
+
+# React Component Patterns
+
+## Component Structure
+
+interface ComponentProps {
+value: string;
+onAction: (id: string) => void;
+}
+
+export function Component({ value, onAction }: ComponentProps) {
+// 1. hooks first
+const [state, setState] = useState<string>('');
+
+// 2. derived values
+const computed = useMemo(() => transform(value), [value]);
+
+// 3. handlers
+const handleClick = useCallback(() => onAction(value), [value, onAction]);
+
+return <div onClick={handleClick}>{computed}</div>;
+}
+
+## TypeScript Rules
+
+- Define Props interfaces (not inline types)
+- Use provided types from `src/types/indicator.ts`
+- Avoid `any` - use `unknown` if type is truly unknown
+- Type event handlers: `React.MouseEvent<HTMLButtonElement>`
+
+## State Management
+
+- Local state for UI concerns (open/closed, selected)
+- Lift state to nearest common ancestor when shared
+- Custom hooks for data fetching (`useIndicators`, `useStats`)
+- Context only for truly global state
+
+## Patterns
+
+// Conditional rendering
+{isLoading ? <Skeleton /> : <Content data={data} />}
+
+// List rendering with keys
+{items.map(item => <Row key={item.id} {...item} />)}
+
+## Anti-patterns
+
+// ❌ Inline object props cause re-renders
+<Component style={{ color: 'red' }} />
+
+// ✅ Use stable references
+const style = useMemo(() => ({ color: 'red' }), []);

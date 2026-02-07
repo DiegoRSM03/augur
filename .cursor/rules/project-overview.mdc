@@ -1,0 +1,60 @@
+---
+description: Threat Intelligence Dashboard - Project context, architecture, and conventions
+alwaysApply: true
+---
+
+# Threat Intelligence Dashboard
+
+## Tech Stack
+
+- **Framework**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS + CSS variables from design-reference.html
+- **State**: React state + Context (no external state management)
+- **Testing**: Vitest + React Testing Library
+- **API**: Express mock server at localhost:3001, proxied to /api
+
+## Project Structure
+
+src/
+├── api/ # API client functions (typed fetch wrappers)
+├── components/ # React components (organized by feature)
+│ ├── layout/ # AppLayout, Sidebar, PageHeader
+│ ├── dashboard/ # StatsRow, Toolbar, Pagination
+│ ├── table/ # DataTable, TableRow
+│ ├── detail/ # DetailPanel
+│ └── ui/ # Badge, Tag, Button, Input, ConfidenceBar
+├── hooks/ # Custom hooks (useIndicators, useStats, useDebounce)
+├── styles/ # global.css with design tokens
+└── types/ # TypeScript interfaces (indicator.ts provided)
+
+## API Endpoints
+
+| Endpoint              | Method | Description                                          |
+| --------------------- | ------ | ---------------------------------------------------- |
+| `/api/indicators`     | GET    | Paginated list (page, limit, severity, type, search) |
+| `/api/indicators/:id` | GET    | Single indicator details                             |
+| `/api/stats`          | GET    | Summary statistics                                   |
+
+## Key Types (from src/types/indicator.ts)
+
+- `Indicator`: id, value, type, severity, source, firstSeen, lastSeen, tags, confidence
+- `IndicatorType`: 'ip' | 'domain' | 'hash' | 'url'
+- `Severity`: 'critical' | 'high' | 'medium' | 'low'
+- `PaginatedResponse<T>`: data, total, page, totalPages
+
+## Design Reference
+
+Open `design-reference.html` in browser for exact specs. Key tokens:
+
+- Fonts: DM Sans (UI), JetBrains Mono (technical data like IPs, hashes)
+- Severity colors: critical=#ff4757, high=#ff8c42, medium=#ffc542, low=#48c774
+- Brand: augur-blue=#6383ff
+- Backgrounds: root=#0a0c10, surface=#0f1117, card=#1a1e28
+
+## Conventions
+
+- Use TypeScript strictly (no `any`)
+- Colocate tests with source files (`Component.tsx` + `Component.test.tsx`)
+- Extract reusable logic into custom hooks
+- Handle loading, error, and empty states for all async operations
+- Debounce search inputs (300ms)
