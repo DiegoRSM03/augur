@@ -2,7 +2,7 @@
  * UI Primitives Barrel Export
  *
  * Import all UI components from this single entry point:
- * import { Badge, Tag, Button, Input, Select, ConfidenceBar, Skeleton, ErrorState, EmptyState, ToastContainer } from '@/components/ui';
+ * import { Badge, Tag, Button, Input, Select, ConfidenceBar, Skeleton, ErrorState, EmptyState, ToastContainer, TagInput, Slider, Combobox } from '@/components/ui';
  */
 
 export { Badge } from './Badge';
@@ -15,3 +15,6 @@ export { Skeleton } from './Skeleton';
 export { ErrorState } from './ErrorState';
 export { EmptyState } from './EmptyState';
 export { ToastContainer } from './Toast';
+export { TagInput } from './TagInput';
+export { Slider } from './Slider';
+export { Combobox } from './Combobox';

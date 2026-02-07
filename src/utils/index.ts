@@ -9,3 +9,8 @@ export {
   getTypeLabel,
   type TagColor,
 } from './formatters';
+
+export {
+  detectIndicatorType,
+  getIndicatorTypeLabel,
+} from './detectIndicatorType';

@@ -5,18 +5,20 @@
  * pagination, sorting, row selection, and export functionality.
  */
 
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { AppLayout, Sidebar, PageHeader } from './components/layout';
 import { StatsRow, Toolbar, Pagination, type ToolbarFilters } from './components/dashboard';
 import { DataTable, type SortConfig, type SortColumn } from './components/table';
 import { DetailPanel } from './components/detail';
 import { ExportModal } from './components/export';
+import { AddIndicatorModal } from './components/indicator';
 import { ToastContainer } from './components/ui';
 import { useIndicators } from './hooks/useIndicators';
 import { useIndicator } from './hooks/useIndicator';
 import { useDebounce } from './hooks/useDebounce';
 import { useSelection } from './hooks/useSelection';
 import { useToast } from './hooks/useToast';
+import { useLocalIndicators } from './hooks/useLocalIndicators';
 import { exportIndicatorsToCsv } from './utils/exportCsv';
 import type { IndicatorType, Severity, Indicator } from './types/indicator';
 
@@ -100,6 +102,15 @@ function App() {
   // Export modal state
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
 
+  // Add Indicator modal state
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  // Reference to the table wrapper for scrolling
+  const tableWrapperRef = useRef<HTMLDivElement>(null);
+
+  // Local indicators (in-memory storage for new indicators)
+  const { localIndicators, addIndicator, localValues } = useLocalIndicators();
+
   // Multi-select state (for export) - stores full indicator objects
   const {
     selectedIds,
@@ -139,11 +150,16 @@ function App() {
     refetch,
   } = useIndicators(apiFilters);
 
+  // Merge local indicators with API data (local indicators first)
+  const mergedData = useMemo(() => {
+    return [...localIndicators, ...rawData];
+  }, [localIndicators, rawData]);
+
   // Filter by source client-side (API doesn't support source filter)
   const filteredData = useMemo(() => {
-    if (!filters.source) return rawData;
-    return rawData.filter((indicator) => indicator.source === filters.source);
-  }, [rawData, filters.source]);
+    if (!filters.source) return mergedData;
+    return mergedData.filter((indicator) => indicator.source === filters.source);
+  }, [mergedData, filters.source]);
 
   // Sort data client-side
   const sortedData = useMemo(
@@ -235,6 +251,46 @@ function App() {
     setIsExportModalOpen(false);
   }, []);
 
+  // Add Indicator handlers
+  const handleAddIndicatorClick = useCallback(() => {
+    setIsAddModalOpen(true);
+  }, []);
+
+  const handleAddModalClose = useCallback(() => {
+    setIsAddModalOpen(false);
+  }, []);
+
+  const handleAddIndicator = useCallback(
+    (indicatorData: Omit<Indicator, 'id'>) => {
+      // Add the indicator to local storage
+      addIndicator(indicatorData);
+
+      // Close modal
+      setIsAddModalOpen(false);
+
+      // Show success toast
+      showToast('Indicator added successfully', 'success');
+
+      // Reset filters to show all indicators
+      setFilters({ search: '', severity: '', type: '', source: '' });
+
+      // Go to page 1
+      setPage(1);
+
+      // Scroll to top of table
+      setTimeout(() => {
+        tableWrapperRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    },
+    [addIndicator, showToast]
+  );
+
+  // Get all existing indicator values for duplicate detection
+  const existingValues = useMemo(() => {
+    const apiValues = rawData.map((indicator) => indicator.value);
+    return [...localValues, ...apiValues];
+  }, [rawData, localValues]);
+
   const handleExport = useCallback(
     (idsToExport: string[]) => {
       // Get the indicators to export from selectedArray (stored in memory)
@@ -272,14 +328,14 @@ function App() {
   // Handle Escape key to close panel
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && activeRowId && !isExportModalOpen) {
+      if (e.key === 'Escape' && activeRowId && !isExportModalOpen && !isAddModalOpen) {
         handleClosePanel();
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [activeRowId, isExportModalOpen, handleClosePanel]);
+  }, [activeRowId, isExportModalOpen, isAddModalOpen, handleClosePanel]);
 
   return (
     <AppLayout>
@@ -289,6 +345,7 @@ function App() {
           title="Threat Intelligence Dashboard"
           subtitle="Real-time threat indicators and campaign intelligence"
           onExport={handleExportClick}
+          onAddIndicator={handleAddIndicatorClick}
         />
 
         {/* Stats Row */}
@@ -309,7 +366,7 @@ function App() {
         {/* Data Table + Detail Panel Container */}
         <div className="flex flex-1">
           {/* Content Area (Table + Pagination) */}
-          <div className="flex flex-col flex-1 relative">
+          <div ref={tableWrapperRef} className="flex flex-col flex-1 relative overflow-auto">
             {/* Data Table */}
             <DataTable
               data={sortedData}
@@ -359,6 +416,14 @@ function App() {
           onExport={handleExport}
         />
       )}
+
+      {/* Add Indicator Modal */}
+      <AddIndicatorModal
+        isOpen={isAddModalOpen}
+        existingValues={existingValues}
+        onClose={handleAddModalClose}
+        onAdd={handleAddIndicator}
+      />
 
       {/* Toast Notifications */}
       <ToastContainer toasts={toasts} onDismiss={dismissToast} />
