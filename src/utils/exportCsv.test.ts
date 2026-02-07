@@ -165,7 +165,7 @@ describe('exportIndicatorsToCsv', () => {
     const lines = capturedCsvContent.split('\n');
 
     // Last column should be empty (just the previous column value followed by nothing)
-    expect(lines[1].endsWith(',') || lines[1].split(',').pop() === '').toBe(true);
+    expect(lines[1]!.endsWith(',') || lines[1]!.split(',').pop() === '').toBe(true);
   });
 
   it('handles all indicator types', () => {

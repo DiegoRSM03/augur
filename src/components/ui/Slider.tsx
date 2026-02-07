@@ -1,5 +1,4 @@
 import { useCallback, useMemo, type ChangeEvent } from 'react';
-import { Button } from './Button';
 
 interface SliderProps {
   value: number;

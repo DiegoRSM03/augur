@@ -91,7 +91,7 @@ describe('ExportModal', () => {
     );
 
     const checkboxes = screen.getAllByRole('checkbox');
-    fireEvent.click(checkboxes[0]);
+    fireEvent.click(checkboxes[0]!);
 
     expect(screen.getByText('2')).toBeInTheDocument();
   });
@@ -154,8 +154,8 @@ describe('ExportModal', () => {
 
     // Uncheck first and third items
     const checkboxes = screen.getAllByRole('checkbox');
-    fireEvent.click(checkboxes[0]);
-    fireEvent.click(checkboxes[2]);
+    fireEvent.click(checkboxes[0]!);
+    fireEvent.click(checkboxes[2]!);
 
     fireEvent.click(screen.getByText('Export CSV'));
 
@@ -291,17 +291,17 @@ describe('ExportModal', () => {
     const checkboxes = screen.getAllByRole('checkbox');
 
     // Uncheck first item
-    fireEvent.click(checkboxes[0]);
+    fireEvent.click(checkboxes[0]!);
     expect(checkboxes[0]).not.toBeChecked();
 
     // Re-check first item
-    fireEvent.click(checkboxes[0]);
+    fireEvent.click(checkboxes[0]!);
     expect(checkboxes[0]).toBeChecked();
 
     fireEvent.click(screen.getByText('Export CSV'));
     // All items should be exported (order may vary due to Set iteration)
     expect(onExport).toHaveBeenCalledTimes(1);
-    const exportedIds = onExport.mock.calls[0][0];
+    const exportedIds = onExport.mock.calls[0]![0];
     expect(exportedIds).toHaveLength(3);
     expect(exportedIds).toContain('id-1');
     expect(exportedIds).toContain('id-2');

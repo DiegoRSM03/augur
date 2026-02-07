@@ -68,7 +68,7 @@ describe('TableRow', () => {
   it('renders indicator type', () => {
     renderTableRow();
     // Text is split by whitespace, use getAllByText and check the span element
-    const typeElements = screen.getAllByText((content, element) => {
+    const typeElements = screen.getAllByText((_content, element) => {
       return element?.tagName === 'SPAN' && element?.textContent === '⬡ IP';
     });
     expect(typeElements.length).toBeGreaterThan(0);

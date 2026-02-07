@@ -245,7 +245,7 @@ describe('useSelection', () => {
       ];
 
       act(() => {
-        result.current.toggleSelection(indicators[0]);
+        result.current.toggleSelection(indicators[0]!);
       });
 
       act(() => {
@@ -339,7 +339,7 @@ describe('useSelection', () => {
         result.current.toggleSelection(indicator);
       });
 
-      const stored = result.current.selectedArray[0];
+      const stored = result.current.selectedArray[0]!;
       expect(stored.id).toBe('id-1');
       expect(stored.value).toBe('192.168.1.1');
       expect(stored.type).toBe('ip');
