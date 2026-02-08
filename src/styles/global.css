@@ -11,6 +11,25 @@
     box-sizing: border-box;
   }
 
+  /* Theme transition for smooth color changes */
+  *,
+  *::before,
+  *::after {
+    transition: background-color 200ms ease-out,
+                border-color 200ms ease-out,
+                color 200ms ease-out,
+                fill 200ms ease-out,
+                stroke 200ms ease-out,
+                box-shadow 200ms ease-out;
+  }
+
+  /* Exclude form inputs from transitions to prevent input lag */
+  input,
+  textarea,
+  select {
+    transition: none !important;
+  }
+
   html {
     font-size: 14px;
     -webkit-font-smoothing: antialiased;
@@ -19,8 +38,8 @@
 
   body {
     font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-    background: #0a0c10;
-    color: #e8eaf0;
+    background: var(--color-bg);
+    color: var(--color-text-primary);
     min-height: 100vh;
     line-height: 1.5;
   }
@@ -29,34 +48,214 @@
     min-height: 100vh;
   }
 
+  /* ============================================================
+     CSS VARIABLES - Dark Mode (Default)
+     ============================================================ */
+  :root,
+  [data-theme="dark"] {
+    /* Background layers */
+    --color-bg: #0a0c10;
+    --color-surface: #0f1117;
+    --color-surface-hover: #161a23;
+    --color-surface-active: #1a1e28;
+    --color-elevated: #161a23;
+    --color-card: #1a1e28;
+    --color-card-hover: #1e2230;
+
+    /* Border colors */
+    --color-border: #262b38;
+    --color-border-subtle: #1e2230;
+    --color-border-hover: #353b4d;
+    --color-border-focus: #6383ff;
+
+    /* Text hierarchy */
+    --color-text-primary: #e8eaf0;
+    --color-text-secondary: #8b90a0;
+    --color-text-tertiary: #5c6170;
+    --color-text-muted: #3e4352;
+
+    /* Severity system */
+    --color-critical: #ff4757;
+    --color-critical-bg: rgba(255, 71, 87, 0.12);
+    --color-critical-border: rgba(255, 71, 87, 0.3);
+    --color-high: #ff8c42;
+    --color-high-bg: rgba(255, 140, 66, 0.12);
+    --color-high-border: rgba(255, 140, 66, 0.3);
+    --color-medium: #ffc542;
+    --color-medium-bg: rgba(255, 197, 66, 0.12);
+    --color-medium-border: rgba(255, 197, 66, 0.3);
+    --color-low: #48c774;
+    --color-low-bg: rgba(72, 199, 116, 0.12);
+    --color-low-border: rgba(72, 199, 116, 0.3);
+
+    /* Type colors */
+    --color-type-ip: #6383ff;
+    --color-type-domain: #a882ff;
+    --color-type-hash: #ff6b9d;
+    --color-type-url: #3dd9c4;
+
+    /* Accent / Brand */
+    --color-accent: #6383ff;
+    --color-accent-hover: #7a96ff;
+    --color-accent-bg: rgba(99, 131, 255, 0.15);
+
+    /* Confidence */
+    --color-confidence-track: #161a23;
+    --color-confidence-fill: #6383ff;
+
+    /* Sidebar */
+    --color-sidebar-bg: #0d0f14;
+    --color-sidebar-hover: #1a1e28;
+    --color-sidebar-active: rgba(99, 131, 255, 0.12);
+
+    /* Modal */
+    --color-overlay: rgba(0, 0, 0, 0.7);
+    --color-modal-bg: #141820;
+
+    /* Skeleton */
+    --color-skeleton: #161a23;
+    --color-skeleton-shine: #1a1e28;
+
+    /* Scrollbar */
+    --color-scrollbar-track: transparent;
+    --color-scrollbar-thumb: #262b38;
+    --color-scrollbar-thumb-hover: #353b4d;
+
+    /* Status */
+    --color-status-active: #48c774;
+  }
+
+  /* ============================================================
+     CSS VARIABLES - Light Mode
+     ============================================================ */
+  [data-theme="light"] {
+    /* Background layers */
+    --color-bg: #f8fafc;
+    --color-surface: #ffffff;
+    --color-surface-hover: #f1f5f9;
+    --color-surface-active: #e2e8f0;
+    --color-elevated: #ffffff;
+    --color-card: #ffffff;
+    --color-card-hover: #f8fafc;
+
+    /* Border colors */
+    --color-border: #e2e8f0;
+    --color-border-subtle: #e2e8f0;
+    --color-border-hover: #cbd5e1;
+    --color-border-focus: #3b82f6;
+
+    /* Text hierarchy */
+    --color-text-primary: #0f172a;
+    --color-text-secondary: #475569;
+    --color-text-tertiary: #64748b;
+    --color-text-muted: #94a3b8;
+
+    /* Severity system (darkened for contrast on light bg) */
+    --color-critical: #dc2626;
+    --color-critical-bg: rgba(220, 38, 38, 0.08);
+    --color-critical-border: rgba(220, 38, 38, 0.25);
+    --color-high: #ea580c;
+    --color-high-bg: rgba(234, 88, 12, 0.08);
+    --color-high-border: rgba(234, 88, 12, 0.25);
+    --color-medium: #ca8a04;
+    --color-medium-bg: rgba(202, 138, 4, 0.08);
+    --color-medium-border: rgba(202, 138, 4, 0.25);
+    --color-low: #16a34a;
+    --color-low-bg: rgba(22, 163, 74, 0.08);
+    --color-low-border: rgba(22, 163, 74, 0.25);
+
+    /* Type colors (darkened) */
+    --color-type-ip: #2563eb;
+    --color-type-domain: #7c3aed;
+    --color-type-hash: #db2777;
+    --color-type-url: #0891b2;
+
+    /* Accent / Brand */
+    --color-accent: #2563eb;
+    --color-accent-hover: #1d4ed8;
+    --color-accent-bg: rgba(37, 99, 235, 0.08);
+
+    /* Confidence */
+    --color-confidence-track: #e2e8f0;
+    --color-confidence-fill: #2563eb;
+
+    /* Sidebar */
+    --color-sidebar-bg: #ffffff;
+    --color-sidebar-hover: #f1f5f9;
+    --color-sidebar-active: #e2e8f0;
+
+    /* Modal */
+    --color-overlay: rgba(15, 23, 42, 0.5);
+    --color-modal-bg: #ffffff;
+
+    /* Skeleton */
+    --color-skeleton: #e2e8f0;
+    --color-skeleton-shine: #f1f5f9;
+
+    /* Scrollbar */
+    --color-scrollbar-track: #f1f5f9;
+    --color-scrollbar-thumb: #cbd5e1;
+    --color-scrollbar-thumb-hover: #94a3b8;
+
+    /* Status */
+    --color-status-active: #16a34a;
+  }
+
   /* Scrollbar styling */
   ::-webkit-scrollbar {
     width: 6px;
   }
 
   ::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--color-scrollbar-track);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #262b38;
+    background: var(--color-scrollbar-thumb);
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #353b4d;
+    background: var(--color-scrollbar-thumb-hover);
   }
 }
 
 /* Component layer for reusable patterns */
 @layer components {
+  /* Theme Toggle Button */
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
+  }
+
+  .theme-toggle:hover {
+    background: var(--color-surface-hover);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-hover);
+  }
+
+  .theme-toggle:focus-visible {
+    outline: none;
+    border-color: var(--color-border-focus);
+    box-shadow: 0 0 0 2px var(--color-accent-bg);
+  }
+
   /* Skeleton loading animation */
   .skeleton {
     background: linear-gradient(
       90deg,
-      #161a23 25%,
-      #1a1e28 50%,
-      #161a23 75%
+      var(--color-skeleton) 25%,
+      var(--color-skeleton-shine) 50%,
+      var(--color-skeleton) 75%
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;

@@ -156,12 +156,14 @@ function NavSectionComponent({ section }: { section: NavSection }) {
 export function Sidebar() {
   return (
     <aside className="bg-bg-sidebar border-r border-border-subtle py-5 flex flex-col sticky top-0 h-screen overflow-y-auto">
-      {/* Logo */}
-      <div className="px-5 pb-6 flex items-center gap-3">
-        <AugurLogo />
-        <span className="font-sans text-[18px] font-bold tracking-[3px] uppercase text-white">
-          Augur
-        </span>
+      {/* Logo - wrapped in dark container to remain visible in light mode */}
+      <div className="px-3 pb-6">
+        <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#0d0f14]">
+          <AugurLogo />
+          <span className="font-sans text-[18px] font-bold tracking-[3px] uppercase text-white">
+            Augur
+          </span>
+        </div>
       </div>
 
       {/* Navigation */}
