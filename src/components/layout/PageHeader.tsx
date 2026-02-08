@@ -1,4 +1,4 @@
-import { Button } from '../ui';
+import { Button, ThemeToggle } from '../ui';
 
 interface PageHeaderProps {
   title: string;
@@ -46,6 +46,7 @@ export function PageHeader({ title, subtitle, onExport, onAddIndicator }: PageHe
       {/* Right side: Live indicator and action buttons */}
       <div className="flex items-center gap-3">
         <LiveIndicator />
+        <ThemeToggle />
         <Button variant="secondary" size="sm" onClick={onExport}>
           <DownloadIcon />
           Export

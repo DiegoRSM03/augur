@@ -18,3 +18,4 @@ export { ToastContainer } from './Toast';
 export { TagInput } from './TagInput';
 export { Slider } from './Slider';
 export { Combobox } from './Combobox';
+export { ThemeToggle } from './ThemeToggle';
