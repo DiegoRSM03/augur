@@ -6,7 +6,7 @@ import type { Indicator } from '../../types/indicator';
 // Mock motion/react to render plain elements in tests
 vi.mock('motion/react', () => ({
   motion: {
-    tr: ({ children, initial, animate, transition, ...props }: Record<string, unknown>) => {
+    tr: ({ children, initial: _initial, animate: _animate, transition: _transition, ...props }: Record<string, unknown>) => {
       const filteredProps = Object.fromEntries(
         Object.entries(props).filter(([key]) => !key.startsWith('on') || ['onClick', 'onChange'].includes(key))
       );

@@ -5,7 +5,7 @@ import { StatCard } from './StatCard';
 // Mock motion/react
 vi.mock('motion/react', () => ({
   motion: {
-    div: ({ children, initial, animate, transition, style, ...props }: Record<string, unknown>) => (
+    div: ({ children, initial: _initial, animate: _animate, transition: _transition, style, ...props }: Record<string, unknown>) => (
       <div style={style as React.CSSProperties} {...props}>{children as React.ReactNode}</div>
     ),
   },
