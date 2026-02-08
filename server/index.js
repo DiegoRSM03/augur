@@ -1,7 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
-import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { generateIndicators } from './data.js';
 
@@ -13,11 +12,6 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 app.use(express.json());
-
-// Health check endpoint for Railway
-app.get('/health', (_req, res) => {
-  res.status(200).json({ status: 'ok' });
-});
 
 // Generate a fixed dataset on startup so results are consistent
 const indicators = generateIndicators(500);
@@ -118,33 +112,12 @@ app.get('/api/stats', (_req, res) => {
 
 // Serve static files from dist/ in production
 const distPath = path.join(__dirname, '../dist');
-const distExists = fs.existsSync(distPath);
-console.log(`  📁 Static files path: ${distPath}`);
-console.log(`  📁 Dist folder exists: ${distExists}`);
+app.use(express.static(distPath));
 
-if (distExists) {
-  app.use(express.static(distPath));
-  
-  // Fallback: serve index.html for client-side routing (must be after API routes)
-  app.get('*', (req, res) => {
-    const indexPath = path.join(distPath, 'index.html');
-    res.sendFile(indexPath, (err) => {
-      if (err) {
-        console.error(`  ❌ Failed to serve index.html: ${err.message}`);
-        res.status(500).send('Frontend not found');
-      }
-    });
-  });
-} else {
-  console.log('  ⚠️  No dist folder found - API-only mode');
-  app.get('*', (req, res) => {
-    res.status(404).json({ 
-      error: 'Frontend not built', 
-      hint: 'Run npm run build first',
-      distPath 
-    });
-  });
-}
+// Fallback: serve index.html for client-side routing (must be after API routes)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(distPath, 'index.html'));
+});
 
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n  🛡  Mock Threat Intel API running on port ${PORT}`);
