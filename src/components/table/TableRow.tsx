@@ -1,3 +1,4 @@
+import { motion, useReducedMotion } from 'motion/react';
 import type { Indicator } from '../../types/indicator';
 import { Badge, Tag, ConfidenceBar } from '../ui';
 import { formatRelativeTime, getTagColor, getTypeIcon, getTypeLabel } from '../../utils/formatters';
@@ -6,13 +7,14 @@ interface TableRowProps {
   indicator: Indicator;
   isSelected: boolean;
   isActive?: boolean;
+  index: number;
   onSelect: (indicator: Indicator) => void;
   onClick: (id: string) => void;
 }
 
 /**
  * Table row component for displaying a single indicator
- * 
+ *
  * - isSelected: checkbox is checked (multi-select for export)
  * - isActive: row is highlighted because detail panel is open
  */
@@ -20,9 +22,12 @@ export function TableRow({
   indicator,
   isSelected,
   isActive = false,
+  index,
   onSelect,
   onClick,
 }: TableRowProps) {
+  const reducedMotion = useReducedMotion();
+
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
     onSelect(indicator);
@@ -36,7 +41,7 @@ export function TableRow({
   const isHighlighted = isSelected || isActive;
 
   return (
-    <tr
+    <motion.tr
       className={`
         border-b border-border-subtle
         transition-colors duration-100
@@ -44,6 +49,13 @@ export function TableRow({
         ${isHighlighted ? 'bg-augur-blue-dim' : 'hover:bg-bg-card-hover'}
       `}
       onClick={handleRowClick}
+      initial={reducedMotion ? false : { opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        delay: reducedMotion ? 0 : index * 0.04,
+        duration: reducedMotion ? 0 : 0.15,
+        ease: 'easeOut',
+      }}
     >
       {/* Checkbox */}
       <td className="px-4 py-3">
@@ -110,6 +122,6 @@ export function TableRow({
           {formatRelativeTime(indicator.lastSeen)}
         </span>
       </td>
-    </tr>
+    </motion.tr>
   );
 }

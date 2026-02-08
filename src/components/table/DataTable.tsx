@@ -10,6 +10,7 @@ interface DataTableProps {
   selectedIds: Set<string>;
   activeRowId: string | null;
   sortConfig: SortConfig;
+  page?: number;
   onSort: (column: SortColumn) => void;
   onSelectRow: (indicator: Indicator) => void;
   onRowClick: (id: string) => void;
@@ -158,6 +159,7 @@ export function DataTable({
   selectedIds,
   activeRowId,
   sortConfig,
+  page = 1,
   onSort,
   onSelectRow,
   onRowClick,
@@ -180,14 +182,18 @@ export function DataTable({
       return <EmptyState onClearFilters={onClearFilters} />;
     }
 
+    // Key tbody by page + first item to re-trigger row entrance animations
+    const tbodyKey = `${page}-${data[0]?.id ?? ''}`;
+
     return (
-      <tbody>
-        {data.map((indicator) => (
+      <tbody key={tbodyKey}>
+        {data.map((indicator, index) => (
           <TableRow
             key={indicator.id}
             indicator={indicator}
             isSelected={selectedIds.has(indicator.id)}
             isActive={activeRowId === indicator.id}
+            index={index}
             onSelect={onSelectRow}
             onClick={onRowClick}
           />

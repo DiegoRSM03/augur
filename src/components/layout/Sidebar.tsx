@@ -1,3 +1,5 @@
+import { motion, useReducedMotion } from 'motion/react';
+
 // Navigation item data structure
 interface NavItem {
   icon: React.ReactNode;
@@ -118,7 +120,8 @@ const navSections: NavSection[] = [
   },
 ];
 
-function NavItemComponent({ item }: { item: NavItem }) {
+function NavItemComponent({ item, globalIndex }: { item: NavItem; globalIndex: number }) {
+  const reducedMotion = useReducedMotion();
   const baseClasses = 'flex items-center gap-3 py-2 px-5 mx-2 my-[1px] rounded-md text-[13px] font-medium cursor-pointer transition-all duration-150';
   const activeClasses = item.active
     ? 'bg-bg-sidebar-active text-augur-blue'
@@ -126,7 +129,17 @@ function NavItemComponent({ item }: { item: NavItem }) {
   const iconOpacity = item.active ? 'opacity-100' : 'opacity-60';
 
   return (
-    <a href="#" className={`${baseClasses} ${activeClasses}`}>
+    <motion.a
+      href="#"
+      className={`${baseClasses} ${activeClasses}`}
+      initial={reducedMotion ? false : { opacity: 0, x: -12 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{
+        delay: reducedMotion ? 0 : globalIndex * 0.05,
+        duration: reducedMotion ? 0 : 0.25,
+        ease: 'easeOut',
+      }}
+    >
       <span className={`flex-shrink-0 ${iconOpacity}`}>{item.icon}</span>
       {item.label}
       {item.badge && (
@@ -134,11 +147,11 @@ function NavItemComponent({ item }: { item: NavItem }) {
           {item.badge}
         </span>
       )}
-    </a>
+    </motion.a>
   );
 }
 
-function NavSectionComponent({ section }: { section: NavSection }) {
+function NavSectionComponent({ section, startIndex }: { section: NavSection; startIndex: number }) {
   return (
     <div className="mb-2">
       {section.label && (
@@ -147,13 +160,21 @@ function NavSectionComponent({ section }: { section: NavSection }) {
         </div>
       )}
       {section.items.map((item, index) => (
-        <NavItemComponent key={index} item={item} />
+        <NavItemComponent key={index} item={item} globalIndex={startIndex + index} />
       ))}
     </div>
   );
 }
 
 export function Sidebar() {
+  // Pre-compute cumulative start indices for each section
+  let runningIndex = 0;
+  const sectionStartIndices = navSections.map((section) => {
+    const start = runningIndex;
+    runningIndex += section.items.length;
+    return start;
+  });
+
   return (
     <aside className="bg-bg-sidebar border-r border-border-subtle py-5 flex flex-col sticky top-0 h-screen overflow-y-auto">
       {/* Logo - wrapped in dark container to remain visible in light mode */}
@@ -169,7 +190,11 @@ export function Sidebar() {
       {/* Navigation */}
       <nav className="flex-1">
         {navSections.map((section, index) => (
-          <NavSectionComponent key={index} section={section} />
+          <NavSectionComponent
+            key={index}
+            section={section}
+            startIndex={sectionStartIndices[index] ?? 0}
+          />
         ))}
       </nav>
     </aside>
