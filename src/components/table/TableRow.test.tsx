@@ -3,6 +3,19 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { TableRow } from './TableRow';
 import type { Indicator } from '../../types/indicator';
 
+// Mock motion/react to render plain elements in tests
+vi.mock('motion/react', () => ({
+  motion: {
+    tr: ({ children, initial: _initial, animate: _animate, transition: _transition, ...props }: Record<string, unknown>) => {
+      const filteredProps = Object.fromEntries(
+        Object.entries(props).filter(([key]) => !key.startsWith('on') || ['onClick', 'onChange'].includes(key))
+      );
+      return <tr {...filteredProps}>{children as React.ReactNode}</tr>;
+    },
+  },
+  useReducedMotion: () => false,
+}));
+
 // Mock the formatters module
 vi.mock('../../utils/formatters', () => ({
   formatRelativeTime: () => '2 min ago',
@@ -38,6 +51,7 @@ function renderTableRow(props: Partial<Parameters<typeof TableRow>[0]> = {}) {
   const defaultProps = {
     indicator: mockIndicator,
     isSelected: false,
+    index: 0,
     onSelect: vi.fn(),
     onClick: vi.fn(),
   };

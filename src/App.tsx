@@ -379,6 +379,7 @@ function App() {
               selectedIds={selectedIds}
               activeRowId={activeRowId}
               sortConfig={sortConfig}
+              page={page}
               onSort={handleSort}
               onSelectRow={handleSelectRow}
               onRowClick={handleRowClick}

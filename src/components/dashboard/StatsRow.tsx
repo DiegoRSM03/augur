@@ -1,6 +1,20 @@
+import { motion, useReducedMotion } from 'motion/react';
 import { useStats } from '../../hooks/useStats';
 import { Skeleton } from '../ui';
 import { StatCard } from './StatCard';
+import type { Severity } from '../../types/indicator';
+
+type StatVariant = 'total' | Severity;
+
+type NumericStatsKey = 'total' | 'critical' | 'high' | 'medium' | 'low';
+
+interface CardConfig {
+  label: string;
+  key: NumericStatsKey;
+  subtitle: string;
+  variant: StatVariant;
+  icon?: React.ReactNode;
+}
 
 /**
  * Shield icon for the total indicators card
@@ -18,6 +32,14 @@ function ShieldIcon() {
     </svg>
   );
 }
+
+const cardConfigs: CardConfig[] = [
+  { label: 'Total Indicators', key: 'total', subtitle: '\u2191 12% from last week', variant: 'total', icon: <ShieldIcon /> },
+  { label: 'Critical', key: 'critical', subtitle: 'Requires immediate action', variant: 'critical' },
+  { label: 'High', key: 'high', subtitle: 'Active monitoring', variant: 'high' },
+  { label: 'Medium', key: 'medium', subtitle: 'Under review', variant: 'medium' },
+  { label: 'Low', key: 'low', subtitle: 'Informational', variant: 'low' },
+];
 
 /**
  * Loading skeleton for stats row
@@ -64,6 +86,7 @@ function StatsRowError({ message, onRetry }: { message: string; onRetry: () => v
  */
 export function StatsRow() {
   const { stats, loading, error, refetch } = useStats();
+  const reducedMotion = useReducedMotion();
 
   if (loading) {
     return <StatsRowSkeleton />;
@@ -77,39 +100,33 @@ export function StatsRow() {
     return null;
   }
 
+  // Key by stats values to re-trigger entrance animation on data change
+  const animationKey = `${stats.total}-${stats.critical}-${stats.high}-${stats.medium}-${stats.low}`;
+
   return (
-    <div className="grid grid-cols-5 gap-3 px-8 py-5">
-      <StatCard
-        label="Total Indicators"
-        value={stats.total}
-        subtitle="↑ 12% from last week"
-        variant="total"
-        icon={<ShieldIcon />}
-      />
-      <StatCard
-        label="Critical"
-        value={stats.critical}
-        subtitle="Requires immediate action"
-        variant="critical"
-      />
-      <StatCard
-        label="High"
-        value={stats.high}
-        subtitle="Active monitoring"
-        variant="high"
-      />
-      <StatCard
-        label="Medium"
-        value={stats.medium}
-        subtitle="Under review"
-        variant="medium"
-      />
-      <StatCard
-        label="Low"
-        value={stats.low}
-        subtitle="Informational"
-        variant="low"
-      />
+    <div className="grid grid-cols-5 gap-3 px-8 py-5" key={animationKey}>
+      {cardConfigs.map((config, index) => (
+        <motion.div
+          key={config.key}
+          className="h-full"
+          initial={reducedMotion ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            delay: reducedMotion ? 0 : index * 0.1,
+            duration: reducedMotion ? 0 : 0.25,
+            ease: 'easeOut',
+          }}
+        >
+          <StatCard
+            label={config.label}
+            value={stats[config.key]}
+            subtitle={config.subtitle}
+            variant={config.variant}
+            icon={config.icon}
+            total={config.variant !== 'total' ? stats.total : undefined}
+          />
+        </motion.div>
+      ))}
     </div>
   );
 }
