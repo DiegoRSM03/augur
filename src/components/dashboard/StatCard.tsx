@@ -61,6 +61,7 @@ export function StatCard({
         rounded-lg
         px-5 py-4
         flex flex-col gap-1
+        h-full
         transition-colors duration-200
         hover:border-border-hover
       "
@@ -70,7 +71,7 @@ export function StatCard({
           {label}
         </span>
         {icon && (
-          <span className="w-4 h-4 text-text-tertiary">{icon}</span>
+          <span className="w-[16px] h-[16px] text-text-tertiary">{icon}</span>
         )}
       </div>
       <div
