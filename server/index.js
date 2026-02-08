@@ -146,7 +146,7 @@ if (distExists) {
   });
 }
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`\n  🛡  Mock Threat Intel API running on port ${PORT}`);
   console.log(`  📊 ${indicators.length} indicators loaded\n`);
 });
