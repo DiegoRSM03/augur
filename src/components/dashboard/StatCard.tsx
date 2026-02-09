@@ -55,7 +55,7 @@ export function StatCard({
           {label}
         </span>
         {icon && (
-          <span className="w-[16px] h-[16px] text-text-tertiary">{icon}</span>
+          <span className="w-4 h-4 text-text-tertiary">{icon}</span>
         )}
       </div>
       <div

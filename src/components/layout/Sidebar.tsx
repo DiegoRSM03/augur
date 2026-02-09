@@ -157,7 +157,7 @@ function NavItemComponent({ item, globalIndex, onNavigate }: { item: NavItem; gl
       }}
       onClick={onNavigate}
     >
-      <span className={`flex-shrink-0 ${iconOpacity}`}>{item.icon}</span>
+      <span className={`shrink-0 ${iconOpacity}`}>{item.icon}</span>
       {item.label}
       {item.badge && (
         <span className="ml-auto bg-severity-critical text-white text-[10px] font-semibold px-1.5 py-[1px] rounded-pill min-w-[18px] text-center">
@@ -260,7 +260,7 @@ export function Sidebar({ isDrawer = false, isOpen = false, onClose }: SidebarPr
 
           {/* Drawer */}
           <motion.aside
-            className="fixed left-0 top-0 h-full w-[220px] z-50 bg-bg-sidebar py-5 flex flex-col overflow-y-auto shadow-elevated"
+            className="fixed left-0 top-0 h-full w-55 z-50 bg-bg-sidebar py-5 flex flex-col overflow-y-auto shadow-elevated"
             initial={{ x: -220 }}
             animate={{ x: 0 }}
             exit={{ x: -220 }}
