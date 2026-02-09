@@ -15,6 +15,7 @@ import { useLocalIndicators } from './hooks/useLocalIndicators';
 import { useLockBodyScroll } from './hooks/useLockBodyScroll';
 import { useBreakpoint } from './hooks/useBreakpoint';
 import { exportIndicatorsToCsv } from './utils/exportCsv';
+import { sortIndicators } from './utils/sortIndicators';
 import type { IndicatorType, Severity, Indicator } from './types/indicator';
 
 const PAGE_LIMIT = 20;
@@ -30,43 +31,6 @@ const KNOWN_SOURCES = [
   'GreyNoise',
   'URLhaus',
 ];
-
-function sortIndicators(
-  data: Indicator[],
-  sortConfig: SortConfig
-): Indicator[] {
-  if (!sortConfig.column) return data;
-
-  return [...data].sort((a, b) => {
-    let comparison = 0;
-
-    switch (sortConfig.column) {
-      case 'indicator':
-        comparison = a.value.localeCompare(b.value);
-        break;
-      case 'type':
-        comparison = a.type.localeCompare(b.type);
-        break;
-      case 'severity': {
-        const severityOrder = { critical: 0, high: 1, medium: 2, low: 3 };
-        comparison = severityOrder[a.severity] - severityOrder[b.severity];
-        break;
-      }
-      case 'confidence':
-        comparison = a.confidence - b.confidence;
-        break;
-      case 'source':
-        comparison = a.source.localeCompare(b.source);
-        break;
-      case 'lastSeen':
-        comparison =
-          new Date(a.lastSeen).getTime() - new Date(b.lastSeen).getTime();
-        break;
-    }
-
-    return sortConfig.direction === 'asc' ? comparison : -comparison;
-  });
-}
 
 function App() {
   const [filters, setFilters] = useState<ToolbarFilters>({
