@@ -4,11 +4,6 @@ import { StatCard } from './StatCard';
 
 // Mock motion/react
 vi.mock('motion/react', () => ({
-  motion: {
-    div: ({ children, initial: _initial, animate: _animate, transition: _transition, style, ...props }: Record<string, unknown>) => (
-      <div style={style as React.CSSProperties} {...props}>{children as React.ReactNode}</div>
-    ),
-  },
   useReducedMotion: () => true, // Disable animations in tests for immediate values
 }));
 
@@ -43,33 +38,5 @@ describe('StatCard', () => {
     );
 
     expect(screen.getByTestId('test-icon')).toBeInTheDocument();
-  });
-
-  it('shows progress bar when total is provided and variant is a severity', () => {
-    render(
-      <StatCard label="Critical" value={25} variant="critical" total={100} />
-    );
-
-    expect(screen.getByTestId('progress-bar')).toBeInTheDocument();
-  });
-
-  it('does not show progress bar when total is undefined', () => {
-    render(<StatCard label="Critical" value={25} variant="critical" />);
-
-    expect(screen.queryByTestId('progress-bar')).not.toBeInTheDocument();
-  });
-
-  it('does not show progress bar when variant is total', () => {
-    render(<StatCard label="Total" value={100} variant="total" total={100} />);
-
-    expect(screen.queryByTestId('progress-bar')).not.toBeInTheDocument();
-  });
-
-  it('does not show progress bar when total is 0', () => {
-    render(
-      <StatCard label="Critical" value={0} variant="critical" total={0} />
-    );
-
-    expect(screen.queryByTestId('progress-bar')).not.toBeInTheDocument();
   });
 });

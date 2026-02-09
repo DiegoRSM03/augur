@@ -123,7 +123,6 @@ export function StatsRow() {
             subtitle={config.subtitle}
             variant={config.variant}
             icon={config.icon}
-            total={config.variant !== 'total' ? stats.total : undefined}
           />
         </motion.div>
       ))}

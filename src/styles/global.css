@@ -1,6 +1,14 @@
 @import "tailwindcss";
 @config "../../tailwind.config.js";
 
+/* Fix spacing scale: Tailwind v4 defaults to 0.25rem per unit,
+   but our html font-size is 14px (not 16px), making rem-based
+   spacing ~12.5% smaller than intended. Using 4px ensures spacing
+   utilities match the design reference pixel values exactly. */
+@theme {
+  --spacing: 4px;
+}
+
 /* Base layer overrides */
 @layer base {
   *,
@@ -103,6 +111,9 @@
     --color-confidence-track: #161a23;
     --color-confidence-fill: #6383ff;
 
+    /* Input */
+    --color-input: #12151c;
+
     /* Sidebar */
     --color-sidebar-bg: #0d0f14;
     --color-sidebar-hover: #1a1e28;
@@ -178,6 +189,9 @@
     /* Confidence */
     --color-confidence-track: #e2e8f0;
     --color-confidence-fill: #2563eb;
+
+    /* Input */
+    --color-input: #f1f5f9;
 
     /* Sidebar */
     --color-sidebar-bg: #ffffff;

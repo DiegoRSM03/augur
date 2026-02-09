@@ -176,10 +176,10 @@ export function Sidebar() {
   });
 
   return (
-    <aside className="bg-bg-sidebar border-r border-border-subtle py-5 flex flex-col sticky top-0 h-screen overflow-y-auto">
+    <aside className="bg-bg-sidebar border-r border-border-subtle pt-4 pb-5 flex flex-col sticky top-0 h-screen overflow-y-auto">
       {/* Logo - wrapped in dark container to remain visible in light mode */}
-      <div className="px-3 pb-6">
-        <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#0d0f14]">
+      <div className="px-2 pb-5">
+        <div className="flex items-center gap-3 px-3 py-1 rounded-lg bg-[#0d0f14]">
           <AugurLogo />
           <span className="font-sans text-[18px] font-bold tracking-[3px] uppercase text-white">
             Augur
