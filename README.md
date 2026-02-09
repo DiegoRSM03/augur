@@ -94,12 +94,15 @@ I divided the project into 6 sequential specs, each building on the previous:
 
 ```
 .cursor/specs/
-├── 01-foundation.md      # Design tokens, API client, hooks, UI primitives
-├── 02-layout-shell.md    # AppLayout, Sidebar, PageHeader
-├── 03-dashboard-core.md  # StatsRow, Toolbar, DataTable, Pagination
-├── 04-detail-panel.md    # DetailPanel, loading/error/empty states
-├── 05-indicators-export.md # Multi-select, CSV export, confirmation modal
-└── 06-add-indicator.md   # Add indicator modal with validation
+├── 01-foundation.md              # Design tokens, API client, hooks, UI primitives
+├── 02-layout-shell.md            # AppLayout, Sidebar, PageHeader
+├── 03-dashboard-core.md          # StatsRow, Toolbar, DataTable, Pagination
+├── 04-detail-panel.md            # DetailPanel, loading/error/empty states
+├── 05-indicators-export.md       # Multi-select, CSV export, confirmation modal
+├── 06-add-indicator.md           # Add indicator modal with validation
+├── 07-dark-mode.md               # Add light/dark mode toggle
+├── 08-animate-dashboard-stats.md # Animate dashboard bars, numbers and sidebar items
+└── 09-responsive-design.md       # Make the whole dashboard application responsive
 ```
 
 Each spec included:
@@ -242,21 +245,19 @@ The project includes a GitHub Actions workflow that:
 name: CI/CD
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 ```
 
 ---
 
 ## What I'd Do With More Time
 
-1. **E2E Tests** — Add Playwright tests for critical user flows
-2. **Accessibility Audit** — Full WCAG 2.1 compliance review
-3. **Performance Optimization** — Virtual scrolling for large datasets
-4. **Real-time Updates** — WebSocket integration for live indicator feeds
-5. **Advanced Filtering** — Date range filters, saved filter presets
-6. **Dark Mode** — The design tokens are ready for it
+1. **Accessibility Audit** — Full WCAG 2.1 compliance review
+2. **Performance Optimization** — Virtual scrolling for large datasets
+3. **Real-time Updates** — WebSocket integration for live indicator feeds
+4. **Advanced Filtering** — Date range filters, saved filter presets
 
 ---
 
@@ -312,5 +313,3 @@ npm test -- Badge.test.tsx
 ## Contact
 
 Built by a developer who believes in **planning before coding** and **specs before implementation**.
-
-If you have questions about my approach or want to discuss the implementation, I'd love to chat.
