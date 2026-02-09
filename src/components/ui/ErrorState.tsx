@@ -1,10 +1,3 @@
-/**
- * Error State Component
- *
- * Displays an error message with optional retry action.
- * Used for API failures and other error conditions.
- */
-
 import { Button } from './Button';
 
 interface ErrorStateProps {
@@ -13,9 +6,6 @@ interface ErrorStateProps {
   className?: string;
 }
 
-/**
- * Error icon
- */
 function ErrorIcon() {
   return (
     <svg
@@ -32,9 +22,6 @@ function ErrorIcon() {
   );
 }
 
-/**
- * Error state component for displaying errors with retry option
- */
 export function ErrorState({ message, onRetry, className = '' }: ErrorStateProps) {
   return (
     <div

@@ -1,10 +1,3 @@
-/**
- * Empty State Component
- *
- * Displays a message when no data is available.
- * Used for empty search results, empty lists, etc.
- */
-
 import { Button } from './Button';
 
 interface EmptyStateProps {
@@ -18,9 +11,6 @@ interface EmptyStateProps {
   className?: string;
 }
 
-/**
- * Default empty icon (search with minus)
- */
 function DefaultEmptyIcon() {
   return (
     <svg
@@ -37,9 +27,6 @@ function DefaultEmptyIcon() {
   );
 }
 
-/**
- * Empty state component for displaying when no data is available
- */
 export function EmptyState({
   title = 'No results found',
   message = 'Try adjusting your search or filter criteria',

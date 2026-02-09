@@ -6,9 +6,6 @@ interface ToastProps {
   onDismiss: (id: string) => void;
 }
 
-/**
- * Success checkmark icon
- */
 function SuccessIcon() {
   return (
     <svg
@@ -24,9 +21,6 @@ function SuccessIcon() {
   );
 }
 
-/**
- * Error X icon
- */
 function ErrorIcon() {
   return (
     <svg
@@ -43,9 +37,6 @@ function ErrorIcon() {
   );
 }
 
-/**
- * Info icon
- */
 function InfoIcon() {
   return (
     <svg
@@ -62,9 +53,6 @@ function InfoIcon() {
   );
 }
 
-/**
- * Get icon component based on toast type
- */
 function getIcon(type: ToastType) {
   switch (type) {
     case 'success':
@@ -77,9 +65,6 @@ function getIcon(type: ToastType) {
   }
 }
 
-/**
- * Single toast notification component
- */
 function Toast({ toast, onDismiss }: ToastProps) {
   return (
     <div
@@ -112,11 +97,6 @@ interface ToastContainerProps {
   onDismiss: (id: string) => void;
 }
 
-/**
- * Toast container component
- * 
- * Renders all active toasts in a fixed position at bottom-right of screen.
- */
 export function ToastContainer({ toasts, onDismiss }: ToastContainerProps) {
   if (toasts.length === 0) return null;
 

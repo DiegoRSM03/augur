@@ -5,10 +5,6 @@ interface UseCountUpOptions {
   enabled?: boolean;
 }
 
-/**
- * Animates a number from a previous value (or 0) to the current value
- * using requestAnimationFrame over a fixed duration.
- */
 export function useCountUp(
   value: number,
   { duration = 800, enabled = true }: UseCountUpOptions = {}
