@@ -95,12 +95,10 @@ export function AnimatedModal({ trigger, title, children }: AnimatedModalProps) 
 
   return (
     <>
-      {/* Trigger button */}
       <div onClick={() => setIsOpen(true)}>
         {trigger}
       </div>
 
-      {/* Modal with AnimatePresence */}
       <AnimatePresence>
         {isOpen && (
           <>

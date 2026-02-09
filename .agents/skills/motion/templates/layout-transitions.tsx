@@ -211,7 +211,7 @@ export function TabPanel({ tabs }: TabPanelProps) {
   const [activeTab, setActiveTab] = useState(tabs[0].id)
 
   return (
-    <LayoutGroup> {/* Namespace layoutIds within this group */}
+    <LayoutGroup>
       <div className="space-y-4">
         {/* Tab buttons */}
         <div className="flex gap-4 border-b border-gray-200">
@@ -249,7 +249,7 @@ export function TabPanel({ tabs }: TabPanelProps) {
  *
  * <div className="grid grid-cols-2 gap-4">
  *   <TabPanel tabs={[...]} />
- *   <TabPanel tabs={[...]} />  {/* No layoutId conflicts! */}
+ *   <TabPanel tabs={[...]} />
  * </div>
  */
 
