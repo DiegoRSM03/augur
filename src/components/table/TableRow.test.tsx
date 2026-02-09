@@ -195,7 +195,7 @@ describe('TableRow', () => {
     renderTableRow({ indicator: hashIndicator });
 
     const valueCell = screen.getByText(hashIndicator.value);
-    expect(valueCell).toHaveClass('text-[11px]');
+    expect(valueCell).toHaveClass('text-[11px]!');
   });
 
   it('renders with different severity levels', () => {
