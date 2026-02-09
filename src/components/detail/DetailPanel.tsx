@@ -1,19 +1,14 @@
-/**
- * Detail Panel Component
- *
- * Slide-in panel displaying full indicator details when a row is selected.
- * Shows value, classification, confidence, tags, timeline, and source.
- */
-
 import { motion } from 'motion/react';
 import type { Indicator } from '../../types/indicator';
-import { Badge, Tag, Button, Skeleton, CloseIcon } from '../ui';
+import { Badge, Tag, Button, CloseIcon } from '../ui';
 import {
   formatRelativeTime,
   getTagColor,
   getTypeIcon,
   getTypeLabel,
 } from '../../utils/formatters';
+import { DetailSkeleton } from './DetailSkeleton';
+import { DetailError } from './DetailError';
 
 interface DetailPanelProps {
   indicator: Indicator | null;
@@ -23,148 +18,22 @@ interface DetailPanelProps {
   onRetry?: () => void;
 }
 
-/**
- * Format ISO date to readable format
- */
 function formatDateTime(iso: string): string {
   const date = new Date(iso);
   if (isNaN(date.getTime())) return 'Unknown';
-
   return date.toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
 }
 
-/**
- * Format ISO date to YYYY-MM-DD
- */
 function formatDate(iso: string): string {
   const date = new Date(iso);
   if (isNaN(date.getTime())) return 'Unknown';
-
   return date.toISOString().slice(0, 10);
 }
 
-/**
- * Format number with commas
- */
 function formatNumber(num: number): string {
   return num.toLocaleString();
 }
 
-/**
- * Error icon
- */
-function ErrorIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className="w-12 h-12 text-severity-critical opacity-50"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="8" x2="12" y2="12" />
-      <line x1="12" y1="16" x2="12.01" y2="16" />
-    </svg>
-  );
-}
-
-/**
- * Loading skeleton for detail panel
- */
-function DetailSkeleton() {
-  return (
-    <div className="p-4 sm:p-5 flex-1">
-      {/* Value section */}
-      <div className="mb-6">
-        <Skeleton className="w-12 h-3 mb-2" />
-        <Skeleton className="w-full h-5" />
-      </div>
-
-      {/* Classification section */}
-      <div className="mb-6">
-        <Skeleton className="w-20 h-3 mb-2" />
-        <div className="flex gap-2 mt-1">
-          <Skeleton className="w-16 h-5" />
-          <Skeleton className="w-12 h-4" />
-        </div>
-      </div>
-
-      {/* Confidence section */}
-      <div className="mb-6">
-        <Skeleton className="w-24 h-3 mb-2" />
-        <div className="flex items-center gap-3 mt-1">
-          <Skeleton className="w-[120px] h-1.5" />
-          <Skeleton className="w-10 h-5" />
-        </div>
-      </div>
-
-      {/* Tags section */}
-      <div className="mb-6">
-        <Skeleton className="w-10 h-3 mb-2" />
-        <div className="flex gap-1.5 flex-wrap mt-1">
-          <Skeleton className="w-14 h-5" />
-          <Skeleton className="w-16 h-5" />
-          <Skeleton className="w-12 h-5" />
-        </div>
-      </div>
-
-      {/* Timeline section */}
-      <div className="mb-6">
-        <Skeleton className="w-16 h-3 mb-2" />
-        <div className="space-y-2">
-          <div className="flex justify-between py-2 border-b border-border-subtle">
-            <Skeleton className="w-16 h-4" />
-            <Skeleton className="w-32 h-4" />
-          </div>
-          <div className="flex justify-between py-2">
-            <Skeleton className="w-16 h-4" />
-            <Skeleton className="w-20 h-4" />
-          </div>
-        </div>
-      </div>
-
-      {/* Source section */}
-      <div className="mb-6">
-        <Skeleton className="w-14 h-3 mb-2" />
-        <div className="flex justify-between py-2 border-b border-border-subtle">
-          <Skeleton className="w-14 h-4" />
-          <Skeleton className="w-20 h-4" />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/**
- * Error state for detail panel
- */
-function DetailError({
-  message,
-  onRetry,
-}: {
-  message: string;
-  onRetry?: () => void;
-}) {
-  return (
-    <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-5 text-center">
-      <ErrorIcon />
-      <p className="mt-4 text-sm font-medium text-severity-critical">
-        Failed to load indicator
-      </p>
-      <p className="mt-1 text-xs text-text-tertiary">{message}</p>
-      {onRetry && (
-        <Button variant="ghost" size="sm" onClick={onRetry} className="mt-4">
-          Try again
-        </Button>
-      )}
-    </div>
-  );
-}
-
-/**
- * Section label component
- */
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
     <div className="text-[10px] font-semibold uppercase tracking-[1px] text-text-tertiary mb-2">
@@ -173,9 +42,6 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-/**
- * Timeline row component
- */
 function TimelineRow({
   label,
   value,
@@ -197,9 +63,6 @@ function TimelineRow({
   );
 }
 
-/**
- * Detail Panel Component
- */
 export function DetailPanel({
   indicator,
   loading = false,
