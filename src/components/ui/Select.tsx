@@ -20,10 +20,6 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
         ref={ref}
         className={`
           appearance-none
-          bg-bg-input
-          bg-[url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235c6170' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E")]
-          bg-no-repeat
-          bg-[right_10px_center]
           border border-border
           rounded-md
           text-text-primary
@@ -36,6 +32,9 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
           focus:shadow-[0_0_0_2px_rgba(99,131,255,0.15)]
           ${className}
         `}
+        style={{
+          background: `var(--color-input) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%235c6170' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 10px center`,
+        }}
         {...props}
       >
         {placeholder && (

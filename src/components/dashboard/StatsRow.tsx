@@ -46,11 +46,11 @@ const cardConfigs: CardConfig[] = [
  */
 function StatsRowSkeleton() {
   return (
-    <div className="grid grid-cols-5 gap-3 px-8 py-5">
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3 px-4 py-4 sm:px-6 sm:py-5 md:px-8">
       {Array.from({ length: 5 }).map((_, i) => (
         <div
           key={i}
-          className="bg-bg-card border border-border-subtle rounded-lg px-5 py-4"
+          className={`bg-bg-card border border-border-subtle rounded-lg px-5 py-4 ${i === 0 ? 'col-span-2 md:col-span-1' : ''}`}
         >
           <Skeleton className="h-3 w-20 mb-3" />
           <Skeleton className="h-8 w-16 mb-2" />
@@ -66,7 +66,7 @@ function StatsRowSkeleton() {
  */
 function StatsRowError({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
-    <div className="px-8 py-5">
+    <div className="px-4 py-4 sm:px-6 sm:py-5 md:px-8">
       <div className="bg-bg-card border border-severity-critical-border rounded-lg p-6 text-center">
         <p className="text-severity-critical mb-2">Failed to load statistics</p>
         <p className="text-text-tertiary text-sm mb-4">{message}</p>
@@ -104,11 +104,11 @@ export function StatsRow() {
   const animationKey = `${stats.total}-${stats.critical}-${stats.high}-${stats.medium}-${stats.low}`;
 
   return (
-    <div className="grid grid-cols-5 gap-3 px-8 py-5" key={animationKey}>
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3 px-4 py-4 sm:px-6 sm:py-5 md:px-8" key={animationKey}>
       {cardConfigs.map((config, index) => (
         <motion.div
           key={config.key}
-          className="h-full"
+          className={`h-full ${index === 0 ? 'col-span-2 md:col-span-1' : ''}`}
           initial={reducedMotion ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -123,7 +123,6 @@ export function StatsRow() {
             subtitle={config.subtitle}
             variant={config.variant}
             icon={config.icon}
-            total={config.variant !== 'total' ? stats.total : undefined}
           />
         </motion.div>
       ))}

@@ -98,12 +98,12 @@ export function TableRow({
       </td>
 
       {/* Source */}
-      <td className="px-4 py-3">
+      <td className="px-4 py-3 hidden sm:table-cell">
         <span className="text-xs text-text-secondary">{indicator.source}</span>
       </td>
 
       {/* Tags */}
-      <td className="px-4 py-3">
+      <td className="px-4 py-3 hidden md:table-cell">
         <div className="flex flex-wrap gap-1">
           {indicator.tags.slice(0, 3).map((tag) => (
             <Tag key={tag} color={getTagColor(tag)}>

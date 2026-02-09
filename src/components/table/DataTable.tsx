@@ -66,10 +66,10 @@ function TableSkeleton() {
               <Skeleton className="w-6 h-4" />
             </div>
           </td>
-          <td className="px-4 py-3">
+          <td className="px-4 py-3 hidden sm:table-cell">
             <Skeleton className="w-20 h-4" />
           </td>
-          <td className="px-4 py-3">
+          <td className="px-4 py-3 hidden md:table-cell">
             <div className="flex gap-1">
               <Skeleton className="w-14 h-5" />
               <Skeleton className="w-14 h-5" />
@@ -203,7 +203,8 @@ export function DataTable({
   };
 
   return (
-    <div className="px-8 pt-4 pb-6 flex-1">
+    <div className="px-4 pt-3 pb-4 sm:px-6 sm:pt-4 sm:pb-5 md:px-8 md:pt-4 md:pb-6 flex-1">
+      <div className="overflow-x-auto">
       <table className="w-full border-collapse border border-border-subtle rounded-lg overflow-hidden">
         <TableHeader
           sortConfig={sortConfig}
@@ -215,6 +216,7 @@ export function DataTable({
         />
         {renderBody()}
       </table>
+      </div>
     </div>
   );
 }

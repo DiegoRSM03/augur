@@ -29,6 +29,7 @@ interface ColumnDef {
   label: string;
   sortable: boolean;
   width?: string;
+  responsiveClass?: string;
 }
 
 const columns: ColumnDef[] = [
@@ -37,8 +38,8 @@ const columns: ColumnDef[] = [
   { key: 'type', label: 'Type', sortable: true },
   { key: 'severity', label: 'Severity', sortable: true },
   { key: 'confidence', label: 'Confidence', sortable: true },
-  { key: 'source', label: 'Source', sortable: true },
-  { key: 'tags', label: 'Tags', sortable: false },
+  { key: 'source', label: 'Source', sortable: true, responsiveClass: 'hidden sm:table-cell' },
+  { key: 'tags', label: 'Tags', sortable: false, responsiveClass: 'hidden md:table-cell' },
   { key: 'lastSeen', label: 'Last Seen', sortable: true },
 ];
 
@@ -139,6 +140,7 @@ export function TableHeader({
                 whitespace-nowrap
                 select-none
                 ${isSortable ? 'cursor-pointer hover:text-text-secondary' : ''}
+                ${column.responsiveClass ?? ''}
               `}
               style={{ width: column.width }}
               onClick={() => isSortable && onSort(column.key as SortColumn)}

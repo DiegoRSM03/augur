@@ -5,6 +5,7 @@
  * Shows value, classification, confidence, tags, timeline, and source.
  */
 
+import { motion } from 'motion/react';
 import type { Indicator } from '../../types/indicator';
 import { Badge, Tag, Button, Skeleton } from '../ui';
 import {
@@ -91,7 +92,7 @@ function ErrorIcon() {
  */
 function DetailSkeleton() {
   return (
-    <div className="p-5 flex-1">
+    <div className="p-4 sm:p-5 flex-1">
       {/* Value section */}
       <div className="mb-6">
         <Skeleton className="w-12 h-3 mb-2" />
@@ -164,7 +165,7 @@ function DetailError({
   onRetry?: () => void;
 }) {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-5 text-center">
+    <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-5 text-center">
       <ErrorIcon />
       <p className="mt-4 text-sm font-medium text-severity-critical">
         Failed to load indicator
@@ -246,18 +247,22 @@ export function DetailPanel({
   };
 
   return (
-    <aside
+    <motion.aside
       className="
-        w-[400px] bg-bg-surface
-        border-l border-border-subtle
+        fixed inset-0 z-30 w-full
+        md:relative md:inset-auto md:z-auto md:w-[400px]
+        bg-bg-surface
+        md:border-l border-border-subtle
         h-full
         overflow-y-auto
         shadow-elevated
         flex flex-col shrink-0
-        animate-slide-in
       "
       role="complementary"
       aria-label="Indicator details"
+      initial={{ x: '100%' }}
+      animate={{ x: 0 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
     >
       {/* Header */}
       <header className="px-5 py-4 border-b border-border-subtle flex items-center justify-between sticky top-0 bg-bg-surface z-10">
@@ -284,7 +289,7 @@ export function DetailPanel({
 
       {!loading && !error && indicator && (
         <>
-          <div className="p-5 flex-1">
+          <div className="p-4 sm:p-5 flex-1">
             {/* Value */}
             <section className="mb-6">
               <SectionLabel>Value</SectionLabel>
@@ -384,7 +389,7 @@ export function DetailPanel({
           </div>
 
           {/* Footer Actions */}
-          <footer className="p-5 border-t border-border-subtle flex gap-2">
+          <footer className="p-4 sm:p-5 border-t border-border-subtle flex gap-2">
             <Button variant="secondary" size="sm" className="flex-1">
               Investigate
             </Button>
@@ -394,6 +399,6 @@ export function DetailPanel({
           </footer>
         </>
       )}
-    </aside>
+    </motion.aside>
   );
 }

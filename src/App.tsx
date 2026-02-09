@@ -20,6 +20,7 @@ import { useSelection } from './hooks/useSelection';
 import { useToast } from './hooks/useToast';
 import { useLocalIndicators } from './hooks/useLocalIndicators';
 import { useLockBodyScroll } from './hooks/useLockBodyScroll';
+import { useBreakpoint } from './hooks/useBreakpoint';
 import { exportIndicatorsToCsv } from './utils/exportCsv';
 import type { IndicatorType, Severity, Indicator } from './types/indicator';
 
@@ -105,6 +106,24 @@ function App() {
 
   // Add Indicator modal state
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  // Sidebar drawer state (mobile/tablet)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isMobile, isTablet } = useBreakpoint();
+  const isDrawerMode = isMobile || isTablet;
+
+  // Close sidebar when switching to desktop breakpoint
+  useEffect(() => {
+    if (!isDrawerMode) setSidebarOpen(false);
+  }, [isDrawerMode]);
+
+  const handleMenuToggle = useCallback(() => {
+    setSidebarOpen((prev) => !prev);
+  }, []);
+
+  const handleSidebarClose = useCallback(() => {
+    setSidebarOpen(false);
+  }, []);
 
   // Lock body scroll when any modal is open
   useLockBodyScroll(isExportModalOpen || isAddModalOpen);
@@ -343,13 +362,18 @@ function App() {
 
   return (
     <AppLayout>
-      <Sidebar />
+      <Sidebar
+        isDrawer={isDrawerMode}
+        isOpen={sidebarOpen}
+        onClose={handleSidebarClose}
+      />
       <main className="flex flex-col overflow-x-hidden">
         <PageHeader
           title="Threat Intelligence Dashboard"
           subtitle="Real-time threat indicators and campaign intelligence"
           onExport={handleExportClick}
           onAddIndicator={handleAddIndicatorClick}
+          onMenuToggle={handleMenuToggle}
         />
 
         {/* Stats Row */}

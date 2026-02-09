@@ -1,6 +1,15 @@
 @import "tailwindcss";
 @config "../../tailwind.config.js";
 
+/* Custom breakpoints: mobile-first responsive design */
+@theme {
+  --spacing: 4px;
+  --breakpoint-sm: 481px;
+  --breakpoint-md: 769px;
+  --breakpoint-lg: 1025px;
+  --breakpoint-xl: 1441px;
+}
+
 /* Base layer overrides */
 @layer base {
   *,
@@ -103,6 +112,9 @@
     --color-confidence-track: #161a23;
     --color-confidence-fill: #6383ff;
 
+    /* Input */
+    --color-input: #12151c;
+
     /* Sidebar */
     --color-sidebar-bg: #0d0f14;
     --color-sidebar-hover: #1a1e28;
@@ -178,6 +190,9 @@
     /* Confidence */
     --color-confidence-track: #e2e8f0;
     --color-confidence-fill: #2563eb;
+
+    /* Input */
+    --color-input: #e2e8f0;
 
     /* Sidebar */
     --color-sidebar-bg: #ffffff;

@@ -45,31 +45,34 @@ describe('StatCard', () => {
     expect(screen.getByTestId('test-icon')).toBeInTheDocument();
   });
 
-  it('shows progress bar when total is provided and variant is a severity', () => {
-    render(
-      <StatCard label="Critical" value={25} variant="critical" total={100} />
+  it('applies severity variant color to value', () => {
+    const { container } = render(
+      <StatCard label="Critical" value={25} variant="critical" />
     );
 
-    expect(screen.getByTestId('progress-bar')).toBeInTheDocument();
+    const valueEl = container.querySelector('.text-severity-critical');
+    expect(valueEl).toBeInTheDocument();
   });
 
-  it('does not show progress bar when total is undefined', () => {
-    render(<StatCard label="Critical" value={25} variant="critical" />);
-
-    expect(screen.queryByTestId('progress-bar')).not.toBeInTheDocument();
-  });
-
-  it('does not show progress bar when variant is total', () => {
-    render(<StatCard label="Total" value={100} variant="total" total={100} />);
-
-    expect(screen.queryByTestId('progress-bar')).not.toBeInTheDocument();
-  });
-
-  it('does not show progress bar when total is 0', () => {
-    render(
-      <StatCard label="Critical" value={0} variant="critical" total={0} />
+  it('applies total variant color to value', () => {
+    const { container } = render(
+      <StatCard label="Total" value={100} variant="total" />
     );
 
-    expect(screen.queryByTestId('progress-bar')).not.toBeInTheDocument();
+    const valueEl = container.querySelector('.text-text-primary');
+    expect(valueEl).toBeInTheDocument();
+  });
+
+  it('does not render subtitle when not provided', () => {
+    render(<StatCard label="Total" value={100} />);
+
+    const subtitleEl = screen.queryByText('Some info');
+    expect(subtitleEl).not.toBeInTheDocument();
+  });
+
+  it('formats large numbers with locale separators', () => {
+    render(<StatCard label="Total" value={10000} />);
+
+    expect(screen.getByText('10,000')).toBeInTheDocument();
   });
 });

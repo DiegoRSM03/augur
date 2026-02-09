@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'motion/react';
+import { useReducedMotion } from 'motion/react';
 import type { Severity } from '../../types/indicator';
 import { useCountUp } from '../../hooks/useCountUp';
 
@@ -10,7 +10,6 @@ interface StatCardProps {
   subtitle?: string;
   variant?: StatVariant;
   icon?: React.ReactNode;
-  total?: number;
 }
 
 const variantValueStyles: Record<StatVariant, string> = {
@@ -21,15 +20,6 @@ const variantValueStyles: Record<StatVariant, string> = {
   low: 'text-severity-low',
 };
 
-const severityBarColors: Record<Severity, string> = {
-  critical: 'var(--color-critical)',
-  high: 'var(--color-high)',
-  medium: 'var(--color-medium)',
-  low: 'var(--color-low)',
-};
-
-const severityVariants: Set<string> = new Set(['critical', 'high', 'medium', 'low']);
-
 /**
  * Stat card component for displaying summary statistics
  */
@@ -39,7 +29,6 @@ export function StatCard({
   subtitle,
   variant = 'total',
   icon,
-  total,
 }: StatCardProps) {
   const reducedMotion = useReducedMotion();
   const numericValue = typeof value === 'number' ? value : null;
@@ -47,11 +36,6 @@ export function StatCard({
     duration: 800,
     enabled: !reducedMotion && numericValue !== null,
   });
-
-  const showProgressBar =
-    total !== undefined && total > 0 && severityVariants.has(variant);
-
-  const ratio = showProgressBar ? (numericValue ?? 0) / total : 0;
 
   return (
     <div
@@ -75,33 +59,12 @@ export function StatCard({
         )}
       </div>
       <div
-        className={`text-[26px] font-bold tracking-tight leading-tight ${variantValueStyles[variant]}`}
+        className={`text-[26px] font-bold tracking-[-0.5px] leading-[1.1] ${variantValueStyles[variant]}`}
       >
         {numericValue !== null ? displayValue.toLocaleString() : value}
       </div>
       {subtitle && (
         <div className="text-[11px] text-text-tertiary">{subtitle}</div>
-      )}
-      {showProgressBar && (
-        <div
-          className="h-1 w-full rounded-sm overflow-hidden mt-1"
-          style={{ background: 'var(--color-confidence-track)' }}
-          data-testid="progress-bar"
-        >
-          <motion.div
-            className="h-full w-full rounded-sm"
-            style={{
-              background: severityBarColors[variant as Severity],
-              transformOrigin: 'left',
-            }}
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: ratio }}
-            transition={{
-              duration: reducedMotion ? 0 : 0.4,
-              ease: 'easeOut',
-            }}
-          />
-        </div>
       )}
     </div>
   );

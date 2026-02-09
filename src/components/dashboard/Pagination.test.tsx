@@ -2,6 +2,16 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Pagination } from './Pagination';
 
+// Mock useBreakpoint to return desktop mode by default
+vi.mock('../../hooks/useBreakpoint', () => ({
+  useBreakpoint: () => ({
+    isMobile: false,
+    isTablet: false,
+    isLaptop: false,
+    isDesktop: true,
+  }),
+}));
+
 describe('Pagination', () => {
   const defaultProps = {
     page: 1,

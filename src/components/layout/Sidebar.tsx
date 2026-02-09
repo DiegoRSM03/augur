@@ -1,4 +1,5 @@
-import { motion, useReducedMotion } from 'motion/react';
+import { useEffect } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 
 // Navigation item data structure
 interface NavItem {
@@ -11,6 +12,12 @@ interface NavItem {
 interface NavSection {
   label?: string;
   items: NavItem[];
+}
+
+interface SidebarProps {
+  isDrawer?: boolean;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
 // SVG Icons as components for cleaner code
@@ -80,6 +87,15 @@ const IntegrationsIcon = () => (
   </svg>
 );
 
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  );
+}
+
 // Logo SVG
 const AugurLogo = () => (
   <svg viewBox="0 0 28 28" fill="none" className="w-7 h-7">
@@ -120,7 +136,7 @@ const navSections: NavSection[] = [
   },
 ];
 
-function NavItemComponent({ item, globalIndex }: { item: NavItem; globalIndex: number }) {
+function NavItemComponent({ item, globalIndex, onNavigate }: { item: NavItem; globalIndex: number; onNavigate?: () => void }) {
   const reducedMotion = useReducedMotion();
   const baseClasses = 'flex items-center gap-3 py-2 px-5 mx-2 my-[1px] rounded-md text-[13px] font-medium cursor-pointer transition-all duration-150';
   const activeClasses = item.active
@@ -139,6 +155,7 @@ function NavItemComponent({ item, globalIndex }: { item: NavItem; globalIndex: n
         duration: reducedMotion ? 0 : 0.25,
         ease: 'easeOut',
       }}
+      onClick={onNavigate}
     >
       <span className={`flex-shrink-0 ${iconOpacity}`}>{item.icon}</span>
       {item.label}
@@ -151,7 +168,7 @@ function NavItemComponent({ item, globalIndex }: { item: NavItem; globalIndex: n
   );
 }
 
-function NavSectionComponent({ section, startIndex }: { section: NavSection; startIndex: number }) {
+function NavSectionComponent({ section, startIndex, onNavigate }: { section: NavSection; startIndex: number; onNavigate?: () => void }) {
   return (
     <div className="mb-2">
       {section.label && (
@@ -160,13 +177,13 @@ function NavSectionComponent({ section, startIndex }: { section: NavSection; sta
         </div>
       )}
       {section.items.map((item, index) => (
-        <NavItemComponent key={index} item={item} globalIndex={startIndex + index} />
+        <NavItemComponent key={index} item={item} globalIndex={startIndex + index} onNavigate={onNavigate} />
       ))}
     </div>
   );
 }
 
-export function Sidebar() {
+function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
   // Pre-compute cumulative start indices for each section
   let runningIndex = 0;
   const sectionStartIndices = navSections.map((section) => {
@@ -176,10 +193,10 @@ export function Sidebar() {
   });
 
   return (
-    <aside className="bg-bg-sidebar border-r border-border-subtle py-5 flex flex-col sticky top-0 h-screen overflow-y-auto">
-      {/* Logo - wrapped in dark container to remain visible in light mode */}
-      <div className="px-3 pb-6">
-        <div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#0d0f14]">
+    <>
+      {/* Logo */}
+      <div className="px-2 pb-6">
+        <div className="flex items-center gap-3 px-3 rounded-lg bg-[#0d0f14]">
           <AugurLogo />
           <span className="font-sans text-[18px] font-bold tracking-[3px] uppercase text-white">
             Augur
@@ -194,9 +211,80 @@ export function Sidebar() {
             key={index}
             section={section}
             startIndex={sectionStartIndices[index] ?? 0}
+            onNavigate={onNavigate}
           />
         ))}
       </nav>
-    </aside>
+    </>
+  );
+}
+
+export function Sidebar({ isDrawer = false, isOpen = false, onClose }: SidebarProps) {
+  const reducedMotion = useReducedMotion();
+
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    if (isDrawer && isOpen) {
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = '';
+      };
+    }
+  }, [isDrawer, isOpen]);
+
+  // Static sidebar for laptop/desktop
+  if (!isDrawer) {
+    return (
+      <aside className="bg-bg-sidebar border-r border-border-subtle py-5 flex flex-col sticky top-0 h-screen overflow-y-auto">
+        <SidebarContent />
+      </aside>
+    );
+  }
+
+  // Drawer sidebar for mobile/tablet
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            className="fixed inset-0 bg-black/50 z-40"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: reducedMotion ? 0 : 0.2 }}
+            onClick={onClose}
+            aria-hidden="true"
+            data-testid="sidebar-backdrop"
+          />
+
+          {/* Drawer */}
+          <motion.aside
+            className="fixed left-0 top-0 h-full w-[220px] z-50 bg-bg-sidebar py-5 flex flex-col overflow-y-auto shadow-elevated"
+            initial={{ x: -220 }}
+            animate={{ x: 0 }}
+            exit={{ x: -220 }}
+            transition={{
+              type: 'tween',
+              duration: reducedMotion ? 0 : 0.25,
+              ease: 'easeOut',
+            }}
+            role="dialog"
+            aria-label="Navigation menu"
+          >
+            {/* Close button */}
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-3 p-1.5 rounded-md text-text-secondary hover:text-text-primary hover:bg-bg-card transition-colors duration-150 cursor-pointer z-10"
+              aria-label="Close menu"
+            >
+              <CloseIcon />
+            </button>
+
+            <SidebarContent onNavigate={onClose} />
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
   );
 }

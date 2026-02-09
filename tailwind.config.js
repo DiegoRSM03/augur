@@ -22,7 +22,7 @@ export default {
           'modal-overlay': 'var(--color-overlay)',
           sidebar: 'var(--color-sidebar-bg)',
           'sidebar-active': 'var(--color-sidebar-active)',
-          input: 'var(--color-surface)',
+          input: 'var(--color-input)',
         },
         // Border colors
         border: {

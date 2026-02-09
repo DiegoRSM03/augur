@@ -1,3 +1,5 @@
+import { useBreakpoint } from '../../hooks/useBreakpoint';
+
 interface PaginationProps {
   page: number;
   totalPages: number;
@@ -85,6 +87,34 @@ function PageButton({
 }
 
 /**
+ * Generate a limited set of page numbers for tablet view
+ */
+function getTabletPageNumbers(
+  currentPage: number,
+  totalPages: number
+): (number | 'ellipsis')[] {
+  if (totalPages <= 3) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
+  const pages: (number | 'ellipsis')[] = [currentPage];
+
+  if (currentPage < totalPages) {
+    pages.push('ellipsis');
+    pages.push(totalPages);
+  }
+
+  if (currentPage > 1) {
+    pages.unshift(1);
+    if (currentPage > 2) {
+      pages.splice(1, 0, 'ellipsis');
+    }
+  }
+
+  return pages;
+}
+
+/**
  * Pagination component for navigating through pages
  */
 export function Pagination({
@@ -94,21 +124,26 @@ export function Pagination({
   limit,
   onPageChange,
 }: PaginationProps) {
+  const { isMobile, isTablet } = useBreakpoint();
+  const isCompact = isMobile || isTablet;
   const startItem = (page - 1) * limit + 1;
   const endItem = Math.min(page * limit, total);
 
-  const pageNumbers = getPageNumbers(page, totalPages);
+  const visiblePages = isCompact
+    ? getTabletPageNumbers(page, totalPages)
+    : getPageNumbers(page, totalPages);
 
   if (totalPages === 0) {
     return null;
   }
 
   return (
-    <div className="flex items-center justify-between px-8 py-3 pb-5">
+    <div className="flex flex-col gap-2 items-center sm:flex-row sm:justify-between px-4 py-3 sm:px-6 md:px-8 md:pb-5">
       {/* Info text */}
-      <span className="text-xs text-text-tertiary">
-        Showing {startItem.toLocaleString()}-{endItem.toLocaleString()} of{' '}
-        {total.toLocaleString()} indicators
+      <span className="text-[10px] sm:text-xs text-text-tertiary">
+        {isMobile
+          ? `Page ${page} of ${totalPages}`
+          : `Showing ${startItem.toLocaleString()}-${endItem.toLocaleString()} of ${total.toLocaleString()} indicators`}
       </span>
 
       {/* Page controls */}
@@ -121,29 +156,30 @@ export function Pagination({
           ‹
         </PageButton>
 
-        {/* Page numbers */}
-        {pageNumbers.map((pageNum, index) => {
-          if (pageNum === 'ellipsis') {
-            return (
-              <span
-                key={`ellipsis-${index}`}
-                className="w-[30px] h-[30px] flex items-center justify-center text-text-tertiary"
-              >
-                …
-              </span>
-            );
-          }
+        {/* Page numbers (hidden on mobile, limited on tablet, full on laptop+) */}
+        {!isMobile &&
+          visiblePages.map((pageNum, index) => {
+            if (pageNum === 'ellipsis') {
+              return (
+                <span
+                  key={`ellipsis-${index}`}
+                  className="w-[30px] h-[30px] flex items-center justify-center text-text-tertiary"
+                >
+                  …
+                </span>
+              );
+            }
 
-          return (
-            <PageButton
-              key={pageNum}
-              active={pageNum === page}
-              onClick={() => onPageChange(pageNum)}
-            >
-              {pageNum}
-            </PageButton>
-          );
-        })}
+            return (
+              <PageButton
+                key={pageNum}
+                active={pageNum === page}
+                onClick={() => onPageChange(pageNum)}
+              >
+                {pageNum}
+              </PageButton>
+            );
+          })}
 
         {/* Next button */}
         <PageButton
