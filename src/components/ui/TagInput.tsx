@@ -1,5 +1,6 @@
 import { useState, useCallback, type KeyboardEvent, type ChangeEvent } from 'react';
 import { Tag } from './Tag';
+import { CloseIcon } from './icons';
 
 interface TagInputProps {
   tags: string[];
@@ -8,19 +9,6 @@ interface TagInputProps {
   error?: boolean;
 }
 
-// X icon for removing tags
-const CloseIcon = () => (
-  <svg
-    className="w-3 h-3"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-  >
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-);
 
 /**
  * TagInput component for entering multiple tags as chips.
@@ -114,7 +102,7 @@ export function TagInput({
             className="ml-0.5 hover:text-severity-critical transition-colors"
             aria-label={`Remove ${tag} tag`}
           >
-            <CloseIcon />
+            <CloseIcon className="w-3 h-3" strokeWidth={2.5} />
           </button>
         </Tag>
       ))}

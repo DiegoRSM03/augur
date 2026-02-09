@@ -6,6 +6,7 @@ import {
   type ChangeEvent,
   type KeyboardEvent,
 } from 'react';
+import { ChevronIcon } from './icons';
 
 interface ComboboxProps {
   value: string;
@@ -16,18 +17,6 @@ interface ComboboxProps {
   error?: boolean;
 }
 
-// Chevron icon for dropdown
-const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
-  <svg
-    className={`w-4 h-4 text-text-tertiary transition-transform ${isOpen ? 'rotate-180' : ''}`}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-  >
-    <polyline points="6 9 12 15 18 9" />
-  </svg>
-);
 
 /**
  * Combobox component - dropdown with custom input support.
@@ -195,7 +184,7 @@ export function Combobox({
           className="px-2 py-1.5 hover:bg-bg-card rounded-r-md transition-colors"
           tabIndex={-1}
         >
-          <ChevronIcon isOpen={isOpen} />
+          <ChevronIcon isOpen={isOpen} className="w-4 h-4 text-text-tertiary" />
         </button>
       </div>
 

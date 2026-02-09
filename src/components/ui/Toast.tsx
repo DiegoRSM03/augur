@@ -1,4 +1,5 @@
 import type { Toast as ToastData, ToastType } from '../../hooks/useToast';
+import { CloseIcon } from './icons';
 
 interface ToastProps {
   toast: ToastData;
@@ -100,10 +101,7 @@ function Toast({ toast, onDismiss }: ToastProps) {
         className="ml-2 text-text-tertiary hover:text-text-secondary transition-colors cursor-pointer"
         aria-label="Dismiss"
       >
-        <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="18" y1="6" x2="6" y2="18" />
-          <line x1="6" y1="6" x2="18" y2="18" />
-        </svg>
+        <CloseIcon className="w-4 h-4" />
       </button>
     </div>
   );
