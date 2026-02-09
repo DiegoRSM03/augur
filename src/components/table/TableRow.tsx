@@ -73,7 +73,7 @@ export function TableRow({
         <span
           className={`
             font-mono text-[12.5px] font-medium text-augur-blue
-            ${indicator.type === 'hash' ? 'text-[11px]' : ''}
+            ${indicator.type === 'hash' ? 'text-[11px]!' : ''}
           `}
         >
           {indicator.value}

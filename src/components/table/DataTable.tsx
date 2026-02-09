@@ -62,7 +62,7 @@ function TableSkeleton() {
           </td>
           <td className="px-4 py-3">
             <div className="flex items-center gap-2">
-              <Skeleton className="w-[60px] h-1" />
+              <Skeleton className="w-15 h-1" />
               <Skeleton className="w-6 h-4" />
             </div>
           </td>
@@ -205,17 +205,17 @@ export function DataTable({
   return (
     <div className="px-4 pt-3 pb-4 sm:px-6 sm:pt-4 sm:pb-5 md:px-8 md:pt-4 md:pb-6 flex-1">
       <div className="overflow-x-auto">
-      <table className="w-full border-collapse border border-border-subtle rounded-lg overflow-hidden">
-        <TableHeader
-          sortConfig={sortConfig}
-          onSort={onSort}
-          showCheckbox={true}
-          allSelected={allSelected}
-          someSelected={someSelected}
-          onSelectAll={onSelectAll}
-        />
-        {renderBody()}
-      </table>
+        <table className="w-full border-collapse border border-border-subtle rounded-lg overflow-hidden">
+          <TableHeader
+            sortConfig={sortConfig}
+            onSort={onSort}
+            showCheckbox={true}
+            allSelected={allSelected}
+            someSelected={someSelected}
+            onSelectAll={onSelectAll}
+          />
+          {renderBody()}
+        </table>
       </div>
     </div>
   );
