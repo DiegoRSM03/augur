@@ -39,8 +39,8 @@ export function PageHeader({ title, subtitle, onExport, onAddIndicator }: PageHe
     <header className="px-8 py-6 border-b border-border-subtle flex items-center justify-between bg-bg-surface sticky top-0 z-10">
       {/* Left side: Title and subtitle */}
       <div>
-        <h1 className="text-2xl font-bold tracking-[-0.3px]">{title}</h1>
-        <p className="text-sm text-text-secondary mt-0.5">{subtitle}</p>
+        <h1 className="text-2xl font-bold tracking-[-0.3px] leading-[1.5]">{title}</h1>
+        <p className="text-[12px] leading-[1.5] text-text-secondary mt-0.5">{subtitle}</p>
       </div>
 
       {/* Right side: Live indicator and action buttons */}

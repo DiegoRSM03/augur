@@ -24,7 +24,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               rounded-md
               text-text-primary
               font-sans text-sm
-              py-1.5 pl-8 pr-3
+              py-1.5 pl-[34px] pr-3
               outline-none
               transition-all duration-150 ease-in-out
               placeholder:text-text-tertiary
