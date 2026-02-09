@@ -1,83 +1,14 @@
-import {
-  useState,
-  useCallback,
-  useEffect,
-  useMemo,
-  type FormEvent,
-} from 'react';
 import { Button, Input, Select, TagInput, Slider, Combobox, CloseIcon, ChevronIcon } from '../ui';
-import { detectIndicatorType, getIndicatorTypeLabel } from '../../utils/detectIndicatorType';
+import { getIndicatorTypeLabel } from '../../utils/detectIndicatorType';
 import type { Indicator, IndicatorType, Severity } from '../../types/indicator';
+import { useAddIndicatorForm } from './useAddIndicatorForm';
+import { PREDEFINED_SOURCES, SEVERITY_OPTIONS, TYPE_OPTIONS } from './constants';
 
 interface AddIndicatorModalProps {
   isOpen: boolean;
   existingValues: string[];
   onClose: () => void;
   onAdd: (indicator: Omit<Indicator, 'id'>) => void;
-}
-
-// Predefined sources for the combobox
-const PREDEFINED_SOURCES = [
-  'AbuseIPDB',
-  'VirusTotal',
-  'OTX AlienVault',
-  'Emerging Threats',
-  'MalwareBazaar',
-  'PhishTank',
-  'Spamhaus',
-  'ThreatFox',
-  'URLhaus',
-  'CIRCL',
-  'Shodan',
-  'GreyNoise',
-  'BinaryEdge',
-  'Censys',
-  'Silent Push',
-  'DomainTools',
-  'Manual Entry',
-];
-
-// Severity options for dropdown
-const SEVERITY_OPTIONS = [
-  { value: 'critical', label: 'Critical' },
-  { value: 'high', label: 'High' },
-  { value: 'medium', label: 'Medium' },
-  { value: 'low', label: 'Low' },
-];
-
-// Type options for dropdown
-const TYPE_OPTIONS = [
-  { value: 'ip', label: 'IP Address' },
-  { value: 'domain', label: 'Domain' },
-  { value: 'hash', label: 'File Hash' },
-  { value: 'url', label: 'URL' },
-];
-
-
-// Form field state
-interface FormState {
-  value: string;
-  type: IndicatorType | '';
-  severity: Severity | '';
-  confidence: number;
-  source: string;
-  tags: string[];
-  lastSeen: string;
-  // Optional fields
-  firstSeen: string;
-  provider: string;
-  reports: number;
-  relatedCampaigns: string;
-}
-
-// Form validation errors
-interface FormErrors {
-  value?: string;
-  type?: string;
-  severity?: string;
-  source?: string;
-  tags?: string;
-  lastSeen?: string;
 }
 
 const WarningIcon = () => (
@@ -88,219 +19,25 @@ const WarningIcon = () => (
   </svg>
 );
 
-/**
- * Get current datetime in ISO format for datetime-local input
- */
-function getCurrentDateTimeLocal(): string {
-  const now = new Date();
-  const offset = now.getTimezoneOffset();
-  const local = new Date(now.getTime() - offset * 60 * 1000);
-  return local.toISOString().slice(0, 16);
-}
-
-/**
- * AddIndicatorModal - Modal form for adding new threat indicators
- *
- * Features:
- * - Type auto-detection from value
- * - Tag chips input
- * - Confidence slider with severity-based colors
- * - Source combobox with predefined options
- * - Duplicate detection with warning
- * - Form validation
- * - Collapsible optional fields section
- */
 export function AddIndicatorModal({
   isOpen,
   existingValues,
   onClose,
   onAdd,
 }: AddIndicatorModalProps) {
-  const now = getCurrentDateTimeLocal();
-
-  // Form state
-  const [form, setForm] = useState<FormState>({
-    value: '',
-    type: '',
-    severity: '',
-    confidence: 50,
-    source: 'Manual Entry',
-    tags: [],
-    lastSeen: now,
-    firstSeen: '',
-    provider: '',
-    reports: 0,
-    relatedCampaigns: '',
-  });
-
-  // Validation errors
-  const [errors, setErrors] = useState<FormErrors>({});
-
-  // Touched fields (for showing errors on blur)
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
-
-  // Optional fields section expanded state
-  const [showOptional, setShowOptional] = useState(false);
-
-  // Duplicate detection
-  const isDuplicate = useMemo(() => {
-    return form.value.trim() !== '' && existingValues.includes(form.value.trim());
-  }, [form.value, existingValues]);
-
-  // Auto-detect type when value changes
-  useEffect(() => {
-    if (form.value.trim()) {
-      const detectedType = detectIndicatorType(form.value);
-      if (detectedType && !form.type) {
-        setForm((prev) => ({ ...prev, type: detectedType }));
-      }
-    }
-  }, [form.value, form.type]);
-
-
-  // Validate form
-  const validateForm = useCallback((): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!form.value.trim()) {
-      newErrors.value = 'Indicator value is required';
-    }
-
-    if (!form.type) {
-      newErrors.type = 'Type is required';
-    }
-
-    if (!form.severity) {
-      newErrors.severity = 'Severity is required';
-    }
-
-    if (!form.source.trim()) {
-      newErrors.source = 'Source is required';
-    }
-
-    if (form.tags.length === 0) {
-      newErrors.tags = 'At least one tag is required';
-    }
-
-    if (!form.lastSeen) {
-      newErrors.lastSeen = 'Last seen date is required';
-    }
-
-    // Validate lastSeen >= firstSeen if firstSeen is provided
-    if (form.firstSeen && form.lastSeen) {
-      const firstSeenDate = new Date(form.firstSeen);
-      const lastSeenDate = new Date(form.lastSeen);
-      if (lastSeenDate < firstSeenDate) {
-        newErrors.lastSeen = 'Last seen must be after first seen';
-      }
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  }, [form]);
-
-  // Check if form is valid (for submit button)
-  const isFormValid = useMemo(() => {
-    return (
-      form.value.trim() !== '' &&
-      form.type !== '' &&
-      form.severity !== '' &&
-      form.source.trim() !== '' &&
-      form.tags.length > 0 &&
-      form.lastSeen !== ''
-    );
-  }, [form]);
-
-  // Handle form submission
-  const handleSubmit = useCallback(
-    (e: FormEvent) => {
-      e.preventDefault();
-
-      if (!validateForm()) {
-        // Mark all fields as touched to show errors
-        setTouched({
-          value: true,
-          type: true,
-          severity: true,
-          source: true,
-          tags: true,
-          lastSeen: true,
-        });
-        return;
-      }
-
-      // Build the indicator object
-      const newIndicator: Omit<Indicator, 'id'> = {
-        value: form.value.trim(),
-        type: form.type as IndicatorType,
-        severity: form.severity as Severity,
-        confidence: form.confidence,
-        source: form.source.trim(),
-        tags: form.tags,
-        lastSeen: new Date(form.lastSeen).toISOString(),
-        firstSeen: form.firstSeen
-          ? new Date(form.firstSeen).toISOString()
-          : new Date(form.lastSeen).toISOString(),
-      };
-
-      onAdd(newIndicator);
-    },
-    [form, validateForm, onAdd]
-  );
-
-  // Handle field blur for validation
-  const handleBlur = useCallback((field: string) => {
-    setTouched((prev) => ({ ...prev, [field]: true }));
-  }, []);
-
-  // Handle escape key and Cmd/Ctrl+Enter
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      } else if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && isFormValid) {
-        handleSubmit(e as unknown as FormEvent);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [isOpen, onClose, isFormValid, handleSubmit]);
-
-  // Handle overlay click
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent) => {
-      if (e.target === e.currentTarget) {
-        onClose();
-      }
-    },
-    [onClose]
-  );
-
-  // Reset form when modal opens
-  useEffect(() => {
-    if (isOpen) {
-      const newNow = getCurrentDateTimeLocal();
-      setForm({
-        value: '',
-        type: '',
-        severity: '',
-        confidence: 50,
-        source: 'Manual Entry',
-        tags: [],
-        lastSeen: newNow,
-        firstSeen: '',
-        provider: '',
-        reports: 0,
-        relatedCampaigns: '',
-      });
-      setErrors({});
-      setTouched({});
-      setShowOptional(false);
-    }
-  }, [isOpen]);
+  const {
+    form,
+    setForm,
+    errors,
+    touched,
+    showOptional,
+    setShowOptional,
+    isDuplicate,
+    isFormValid,
+    handleSubmit,
+    handleBlur,
+    handleOverlayClick,
+  } = useAddIndicatorForm({ isOpen, existingValues, onClose, onAdd });
 
   if (!isOpen) return null;
 
@@ -371,7 +108,6 @@ export function AddIndicatorModal({
                 <p className="text-xs text-severity-critical mt-1">{errors.value}</p>
               )}
 
-              {/* Duplicate warning */}
               {isDuplicate && (
                 <div className="mt-2 flex items-center gap-2 px-3 py-2 bg-severity-medium-bg border border-severity-medium-border rounded-md">
                   <WarningIcon />
@@ -381,7 +117,6 @@ export function AddIndicatorModal({
                 </div>
               )}
 
-              {/* Auto-detected type hint */}
               {form.value.trim() && form.type && (
                 <p className="text-xs text-text-tertiary mt-1">
                   Detected as: <span className="text-augur-blue">{getIndicatorTypeLabel(form.type as IndicatorType)}</span>
@@ -389,9 +124,8 @@ export function AddIndicatorModal({
               )}
             </div>
 
-            {/* Type and Severity - Side by side */}
+            {/* Type and Severity */}
             <div className="grid grid-cols-2 gap-4">
-              {/* Type */}
               <div>
                 <label className="block text-[11px] font-semibold uppercase tracking-wider text-text-tertiary mb-1.5">
                   Type <span className="text-severity-critical">*</span>
@@ -411,7 +145,6 @@ export function AddIndicatorModal({
                 )}
               </div>
 
-              {/* Severity */}
               <div>
                 <label className="block text-[11px] font-semibold uppercase tracking-wider text-text-tertiary mb-1.5">
                   Severity <span className="text-severity-critical">*</span>
@@ -528,7 +261,6 @@ export function AddIndicatorModal({
 
               {showOptional && (
                 <div className="mt-4 space-y-4">
-                  {/* First Seen */}
                   <div>
                     <label className="block text-[11px] font-semibold uppercase tracking-wider text-text-tertiary mb-1.5">
                       First Seen
@@ -557,7 +289,6 @@ export function AddIndicatorModal({
                     </p>
                   </div>
 
-                  {/* Provider */}
                   <div>
                     <label className="block text-[11px] font-semibold uppercase tracking-wider text-text-tertiary mb-1.5">
                       Provider
@@ -572,7 +303,6 @@ export function AddIndicatorModal({
                     </p>
                   </div>
 
-                  {/* Reports */}
                   <div>
                     <label className="block text-[11px] font-semibold uppercase tracking-wider text-text-tertiary mb-1.5">
                       Reports
@@ -590,7 +320,6 @@ export function AddIndicatorModal({
                     </p>
                   </div>
 
-                  {/* Related Campaigns */}
                   <div>
                     <label className="block text-[11px] font-semibold uppercase tracking-wider text-text-tertiary mb-1.5">
                       Related Campaigns
