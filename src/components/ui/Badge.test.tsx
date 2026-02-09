@@ -3,37 +3,16 @@ import { render, screen } from '@testing-library/react';
 import { Badge } from './Badge';
 
 describe('Badge', () => {
-  it('renders with critical severity', () => {
-    render(<Badge severity="critical" />);
-    const badge = screen.getByText('critical');
+  it.each([
+    { severity: 'critical' as const, classes: ['text-severity-critical', 'bg-severity-critical-bg', 'border-severity-critical-border'] },
+    { severity: 'high' as const, classes: ['text-severity-high', 'bg-severity-high-bg'] },
+    { severity: 'medium' as const, classes: ['text-severity-medium', 'bg-severity-medium-bg'] },
+    { severity: 'low' as const, classes: ['text-severity-low', 'bg-severity-low-bg'] },
+  ])('renders with $severity severity', ({ severity, classes }) => {
+    render(<Badge severity={severity} />);
+    const badge = screen.getByText(severity);
     expect(badge).toBeInTheDocument();
-    expect(badge).toHaveClass('text-severity-critical');
-    expect(badge).toHaveClass('bg-severity-critical-bg');
-    expect(badge).toHaveClass('border-severity-critical-border');
-  });
-
-  it('renders with high severity', () => {
-    render(<Badge severity="high" />);
-    const badge = screen.getByText('high');
-    expect(badge).toBeInTheDocument();
-    expect(badge).toHaveClass('text-severity-high');
-    expect(badge).toHaveClass('bg-severity-high-bg');
-  });
-
-  it('renders with medium severity', () => {
-    render(<Badge severity="medium" />);
-    const badge = screen.getByText('medium');
-    expect(badge).toBeInTheDocument();
-    expect(badge).toHaveClass('text-severity-medium');
-    expect(badge).toHaveClass('bg-severity-medium-bg');
-  });
-
-  it('renders with low severity', () => {
-    render(<Badge severity="low" />);
-    const badge = screen.getByText('low');
-    expect(badge).toBeInTheDocument();
-    expect(badge).toHaveClass('text-severity-low');
-    expect(badge).toHaveClass('bg-severity-low-bg');
+    classes.forEach((cls) => expect(badge).toHaveClass(cls));
   });
 
   it('applies custom className', () => {

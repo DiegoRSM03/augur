@@ -16,52 +16,24 @@ describe('Button', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it('renders with primary variant', () => {
-    render(<Button variant="primary">Primary</Button>);
-    const button = screen.getByText('Primary');
-    expect(button).toHaveClass('bg-augur-blue');
-    expect(button).toHaveClass('text-white');
-    expect(button).toHaveClass('border-augur-blue');
+  it.each([
+    { variant: 'primary' as const, classes: ['bg-augur-blue', 'text-white', 'border-augur-blue'] },
+    { variant: 'secondary' as const, classes: ['bg-transparent', 'text-text-primary', 'border-border'] },
+    { variant: 'ghost' as const, classes: ['bg-transparent', 'text-text-secondary', 'border-transparent'] },
+    { variant: 'danger' as const, classes: ['bg-severity-critical-bg', 'text-severity-critical', 'border-severity-critical-border'] },
+  ])('renders with $variant variant', ({ variant, classes }) => {
+    render(<Button variant={variant}>{variant}</Button>);
+    const button = screen.getByText(variant);
+    classes.forEach((cls) => expect(button).toHaveClass(cls));
   });
 
-  it('renders with secondary variant by default', () => {
-    render(<Button>Secondary</Button>);
-    const button = screen.getByText('Secondary');
-    expect(button).toHaveClass('bg-transparent');
-    expect(button).toHaveClass('text-text-primary');
-    expect(button).toHaveClass('border-border');
-  });
-
-  it('renders with ghost variant', () => {
-    render(<Button variant="ghost">Ghost</Button>);
-    const button = screen.getByText('Ghost');
-    expect(button).toHaveClass('bg-transparent');
-    expect(button).toHaveClass('text-text-secondary');
-    expect(button).toHaveClass('border-transparent');
-  });
-
-  it('renders with danger variant', () => {
-    render(<Button variant="danger">Danger</Button>);
-    const button = screen.getByText('Danger');
-    expect(button).toHaveClass('bg-severity-critical-bg');
-    expect(button).toHaveClass('text-severity-critical');
-    expect(button).toHaveClass('border-severity-critical-border');
-  });
-
-  it('renders with default size', () => {
-    render(<Button>Default Size</Button>);
-    const button = screen.getByText('Default Size');
-    expect(button).toHaveClass('px-3.5');
-    expect(button).toHaveClass('py-1.5');
-    expect(button).toHaveClass('text-sm');
-  });
-
-  it('renders with small size', () => {
-    render(<Button size="sm">Small</Button>);
-    const button = screen.getByText('Small');
-    expect(button).toHaveClass('px-2.5');
-    expect(button).toHaveClass('py-1');
-    expect(button).toHaveClass('text-xs');
+  it.each([
+    { size: 'default' as const, label: 'Default Size', classes: ['px-3.5', 'py-1.5', 'text-sm'] },
+    { size: 'sm' as const, label: 'Small', classes: ['px-2.5', 'py-1', 'text-xs'] },
+  ])('renders with $size size', ({ size, label, classes }) => {
+    render(<Button size={size}>{label}</Button>);
+    const button = screen.getByText(label);
+    classes.forEach((cls) => expect(button).toHaveClass(cls));
   });
 
   it('applies custom className', () => {

@@ -8,36 +8,17 @@ describe('Tag', () => {
     expect(screen.getByText('test-tag')).toBeInTheDocument();
   });
 
-  it('renders with red color', () => {
-    render(<Tag color="red">malware</Tag>);
-    const tag = screen.getByText('malware');
-    expect(tag).toHaveClass('bg-tag-red');
-    expect(tag).toHaveClass('text-tag-red-text');
-    expect(tag).toHaveClass('border-tag-red-border');
-  });
-
-  it('renders with blue color', () => {
-    render(<Tag color="blue">scanner</Tag>);
-    const tag = screen.getByText('scanner');
-    expect(tag).toHaveClass('bg-tag-blue');
-    expect(tag).toHaveClass('text-tag-blue-text');
-    expect(tag).toHaveClass('border-tag-blue-border');
-  });
-
-  it('renders with purple color', () => {
-    render(<Tag color="purple">c2</Tag>);
-    const tag = screen.getByText('c2');
-    expect(tag).toHaveClass('bg-tag-purple');
-    expect(tag).toHaveClass('text-tag-purple-text');
-    expect(tag).toHaveClass('border-tag-purple-border');
-  });
-
-  it('renders with teal color', () => {
-    render(<Tag color="teal">phishing</Tag>);
-    const tag = screen.getByText('phishing');
-    expect(tag).toHaveClass('bg-tag-teal');
-    expect(tag).toHaveClass('text-tag-teal-text');
-    expect(tag).toHaveClass('border-tag-teal-border');
+  it.each([
+    { color: 'red' as const, text: 'malware' },
+    { color: 'blue' as const, text: 'scanner' },
+    { color: 'purple' as const, text: 'c2' },
+    { color: 'teal' as const, text: 'phishing' },
+  ])('renders with $color color', ({ color, text }) => {
+    render(<Tag color={color}>{text}</Tag>);
+    const tag = screen.getByText(text);
+    expect(tag).toHaveClass(`bg-tag-${color}`);
+    expect(tag).toHaveClass(`text-tag-${color}-text`);
+    expect(tag).toHaveClass(`border-tag-${color}-border`);
   });
 
   it('renders with gray color by default', () => {
