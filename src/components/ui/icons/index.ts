@@ -1,3 +1,4 @@
+export { AlertCircleIcon } from './AlertCircleIcon';
 export { ChevronIcon } from './ChevronIcon';
 export { CloseIcon } from './CloseIcon';
 export { DownloadIcon } from './DownloadIcon';
@@ -8,6 +9,8 @@ export { InfoIcon } from './InfoIcon';
 export { MoonIcon } from './MoonIcon';
 export { PlusIcon } from './PlusIcon';
 export { SearchIcon } from './SearchIcon';
+export { SearchMinusIcon } from './SearchMinusIcon';
+export { ShieldIcon } from './ShieldIcon';
 export { SuccessIcon } from './SuccessIcon';
 export { SunIcon } from './SunIcon';
 export { WarningIcon } from './WarningIcon';

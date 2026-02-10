@@ -1,5 +1,6 @@
 import type { Indicator } from '../../types/indicator';
 import { Skeleton, Button } from '../ui';
+import { SearchMinusIcon } from '../ui/icons';
 import { TableHeader, type SortConfig, type SortColumn } from './TableHeader';
 import { TableRow } from './TableRow';
 
@@ -21,28 +22,6 @@ interface DataTableProps {
   onRetry?: () => void;
 }
 
-/**
- * Empty state icon
- */
-function EmptyIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      className="w-12 h-12 opacity-30"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-      <line x1="8" y1="11" x2="14" y2="11" />
-    </svg>
-  );
-}
-
-/**
- * Loading skeleton for table rows
- */
 function TableSkeleton() {
   return (
     <tbody>
@@ -84,16 +63,13 @@ function TableSkeleton() {
   );
 }
 
-/**
- * Empty state component
- */
-function EmptyState({ onClearFilters }: { onClearFilters?: () => void }) {
+function TableEmptyState({ onClearFilters }: { onClearFilters?: () => void }) {
   return (
     <tbody>
       <tr>
         <td colSpan={8}>
           <div className="flex flex-col items-center justify-center py-16 text-text-tertiary text-center">
-            <EmptyIcon />
+            <SearchMinusIcon className="w-12 h-12 opacity-30" />
             <p className="mt-4 text-sm font-medium">No indicators found</p>
             <p className="mt-1 text-xs">
               Try adjusting your search or filter criteria
@@ -115,10 +91,7 @@ function EmptyState({ onClearFilters }: { onClearFilters?: () => void }) {
   );
 }
 
-/**
- * Error state component
- */
-function ErrorState({
+function TableErrorState({
   message,
   onRetry,
 }: {
@@ -149,9 +122,6 @@ function ErrorState({
   );
 }
 
-/**
- * Data table component for displaying indicators
- */
 export function DataTable({
   data,
   loading,
@@ -175,11 +145,11 @@ export function DataTable({
     }
 
     if (error) {
-      return <ErrorState message={error.message} onRetry={onRetry} />;
+      return <TableErrorState message={error.message} onRetry={onRetry} />;
     }
 
     if (data.length === 0) {
-      return <EmptyState onClearFilters={onClearFilters} />;
+      return <TableEmptyState onClearFilters={onClearFilters} />;
     }
 
     // Key tbody by page + first item to re-trigger row entrance animations

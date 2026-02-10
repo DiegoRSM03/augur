@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'motion/react';
 import { useStats } from '../../hooks/useStats';
 import { Skeleton } from '../ui';
+import { ShieldIcon } from '../ui/icons';
 import { StatCard } from './StatCard';
 import type { Severity } from '../../types/indicator';
 
@@ -16,23 +17,6 @@ interface CardConfig {
   icon?: React.ReactNode;
 }
 
-/**
- * Shield icon for the total indicators card
- */
-function ShieldIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className="w-full h-full"
-    >
-      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-    </svg>
-  );
-}
-
 const cardConfigs: CardConfig[] = [
   { label: 'Total Indicators', key: 'total', subtitle: '\u2191 12% from last week', variant: 'total', icon: <ShieldIcon /> },
   { label: 'Critical', key: 'critical', subtitle: 'Requires immediate action', variant: 'critical' },
@@ -41,9 +25,6 @@ const cardConfigs: CardConfig[] = [
   { label: 'Low', key: 'low', subtitle: 'Informational', variant: 'low' },
 ];
 
-/**
- * Loading skeleton for stats row
- */
 function StatsRowSkeleton() {
   return (
     <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3 px-4 py-4 sm:px-6 sm:py-5 md:px-8">
@@ -61,9 +42,6 @@ function StatsRowSkeleton() {
   );
 }
 
-/**
- * Error state for stats row
- */
 function StatsRowError({ message, onRetry }: { message: string; onRetry: () => void }) {
   return (
     <div className="px-4 py-4 sm:px-6 sm:py-5 md:px-8">
@@ -81,9 +59,6 @@ function StatsRowError({ message, onRetry }: { message: string; onRetry: () => v
   );
 }
 
-/**
- * Stats row component displaying summary statistics
- */
 export function StatsRow() {
   const { stats, loading, error, refetch } = useStats();
   const reducedMotion = useReducedMotion();
