@@ -89,7 +89,6 @@ describe('Pagination', () => {
   it('shows ellipsis for large page ranges', () => {
     render(<Pagination {...defaultProps} page={5} totalPages={20} />);
 
-    // Should show ellipsis
     const ellipses = screen.getAllByText('…');
     expect(ellipses.length).toBeGreaterThan(0);
   });
@@ -97,7 +96,6 @@ describe('Pagination', () => {
   it('shows all pages when totalPages <= 7', () => {
     render(<Pagination {...defaultProps} totalPages={5} total={100} />);
 
-    // Should show pages 1-5 without ellipsis
     expect(screen.getByText('1')).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
@@ -123,18 +121,14 @@ describe('Pagination', () => {
         limit={20}
       />
     );
-    // Should format as "10,000"
     expect(screen.getByText(/10,000/)).toBeInTheDocument();
   });
 
   it('shows first and last page with ellipsis in middle', () => {
     render(<Pagination {...defaultProps} page={10} totalPages={100} />);
 
-    // First page should be visible
     expect(screen.getByText('1')).toBeInTheDocument();
-    // Last page should be visible
     expect(screen.getByText('100')).toBeInTheDocument();
-    // Current page area should be visible
     expect(screen.getByText('10')).toBeInTheDocument();
   });
 
@@ -143,8 +137,6 @@ describe('Pagination', () => {
 
     expect(screen.getByText(/Showing 1-15 of 15 indicators/)).toBeInTheDocument();
     expect(screen.getByText('1')).toBeInTheDocument();
-
-    // Both nav buttons should be disabled
     expect(screen.getByText('‹')).toBeDisabled();
     expect(screen.getByText('›')).toBeDisabled();
   });

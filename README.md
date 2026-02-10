@@ -18,15 +18,27 @@ Rather than diving straight into code, I took a **Spec-Driven Development (SDD)*
 
 ## Features
 
-- **Dashboard Layout** — Responsive sidebar navigation, page header, stats row, data table, and slide-in detail panel
-- **Data Table** — Paginated display of 500 threat indicators with column sorting
-- **Advanced Filtering** — Real-time search with debouncing + severity/type dropdown filters
-- **Detail Panel** — Click any row to view full indicator details in a slide-in panel
-- **Multi-Select & Export** — Select multiple indicators across pages and export to CSV
-- **Add Indicator** — Modal form with auto-detection of indicator type, validation, and duplicate detection
-- **State Management** — Comprehensive loading, error, and empty states throughout
-- **Unit Tests** — Key components and hooks tested with Vitest + React Testing Library
-- **CI/CD Pipeline** — GitHub Actions workflow with linting, testing, and auto-deploy to Railway
+### Core
+
+| Feature | Description |
+| ------- | ----------- |
+| **Dashboard Layout** | Sidebar navigation, page header, stats row, data table, and slide-in detail panel |
+| **Data Table** | Paginated display of 500 threat indicators with column sorting |
+| **Advanced Filtering** | Real-time search with debouncing + severity/type dropdown filters |
+| **Detail Panel** | Click any row to view full indicator details in a slide-in panel |
+| **State Management** | Comprehensive loading, error, and empty states throughout |
+| **Unit Tests** | Key components and hooks tested with Vitest + React Testing Library |
+| **CI/CD Pipeline** | GitHub Actions workflow with linting, testing, and auto-deploy to Railway |
+
+### Bonus
+
+| Feature | Description |
+| ------- | ----------- |
+| **Indicator Export** | Multi-select with persistent selection across pages, ExportModal with checkbox list, CSV generation with proper escaping |
+| **Add Indicator** | Modal form with type auto-detection, TagInput chips, Slider for confidence, Combobox for source, duplicate detection, validation |
+| **Dark Mode** | ThemeContext with localStorage persistence, ThemeToggle with animated sun/moon icons, light mode CSS variables, 200ms transitions |
+| **Animated Stats** | useCountUp hook (800ms rAF animation), StatCard progress bars for severity, StatsRow stagger entrance, TableRow fade-in |
+| **Responsive Design** | Mobile-first breakpoints (481/769/1025px), useMediaQuery/useBreakpoint hooks, sidebar drawer, collapsible toolbar filters |
 
 ---
 

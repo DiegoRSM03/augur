@@ -32,22 +32,18 @@ describe('ConfidenceBar', () => {
   });
 
   it('uses severity-based color when no severity prop', () => {
-    // Critical (>=80)
     const { rerender } = render(<ConfidenceBar value={85} />);
     expect(screen.getByRole('progressbar')).toHaveClass('bg-severity-critical');
     expect(screen.getByText('85')).toHaveClass('text-severity-critical');
 
-    // High (>=60)
     rerender(<ConfidenceBar value={70} />);
     expect(screen.getByRole('progressbar')).toHaveClass('bg-severity-high');
     expect(screen.getByText('70')).toHaveClass('text-severity-high');
 
-    // Medium (>=40)
     rerender(<ConfidenceBar value={50} />);
     expect(screen.getByRole('progressbar')).toHaveClass('bg-severity-medium');
     expect(screen.getByText('50')).toHaveClass('text-severity-medium');
 
-    // Low (<40)
     rerender(<ConfidenceBar value={30} />);
     expect(screen.getByRole('progressbar')).toHaveClass('bg-severity-low');
     expect(screen.getByText('30')).toHaveClass('text-severity-low');

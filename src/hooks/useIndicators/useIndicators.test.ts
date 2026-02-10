@@ -55,11 +55,9 @@ describe('useIndicators', () => {
 
     const { result } = renderHook(() => useIndicators());
 
-    // Initially loading
     expect(result.current.loading).toBe(true);
     expect(result.current.data).toEqual([]);
 
-    // Wait for fetch to complete
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
     });

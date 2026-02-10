@@ -27,17 +27,14 @@ describe('useCountUp', () => {
   it('should start from 0 and animate toward target when enabled', () => {
     const { result } = renderHook(() => useCountUp(100, { duration: 800 }));
 
-    // Initially 0
     expect(result.current).toBe(0);
 
-    // Advance partially
     act(() => {
       vi.advanceTimersByTime(400);
     });
     expect(result.current).toBeGreaterThan(0);
     expect(result.current).toBeLessThan(100);
 
-    // Advance past duration
     act(() => {
       vi.advanceTimersByTime(500);
     });
@@ -67,16 +64,13 @@ describe('useCountUp', () => {
       { initialProps: { value: 100 } }
     );
 
-    // Finish first animation
     act(() => {
       vi.advanceTimersByTime(900);
     });
     expect(result.current).toBe(100);
 
-    // Change value
     rerender({ value: 200 });
 
-    // Advance past duration
     act(() => {
       vi.advanceTimersByTime(900);
     });

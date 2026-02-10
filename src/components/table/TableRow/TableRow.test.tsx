@@ -46,7 +46,6 @@ const mockIndicator: Indicator = {
   confidence: 94,
 };
 
-// Helper to render TableRow inside a table
 function renderTableRow(props: Partial<Parameters<typeof TableRow>[0]> = {}) {
   const defaultProps = {
     indicator: mockIndicator,
@@ -81,7 +80,6 @@ describe('TableRow', () => {
 
   it('renders indicator type', () => {
     renderTableRow();
-    // Text is split by whitespace, use getAllByText and check the span element
     const typeElements = screen.getAllByText((_content, element) => {
       return element?.tagName === 'SPAN' && element?.textContent === '⬡ IP';
     });

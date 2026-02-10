@@ -24,18 +24,14 @@ describe('useDebounce', () => {
 
     expect(result.current).toBe('initial');
 
-    // Update the value
     rerender({ value: 'updated' });
 
-    // Value should still be initial before delay
     expect(result.current).toBe('initial');
 
-    // Fast forward time
     act(() => {
       vi.advanceTimersByTime(300);
     });
 
-    // Now the value should be updated
     expect(result.current).toBe('updated');
   });
 
@@ -45,7 +41,6 @@ describe('useDebounce', () => {
       { initialProps: { value: 'a' } }
     );
 
-    // Rapid changes
     rerender({ value: 'b' });
     act(() => {
       vi.advanceTimersByTime(100);
@@ -58,15 +53,12 @@ describe('useDebounce', () => {
 
     rerender({ value: 'd' });
 
-    // Value should still be 'a' since timer keeps resetting
     expect(result.current).toBe('a');
 
-    // Wait full delay after last change
     act(() => {
       vi.advanceTimersByTime(300);
     });
 
-    // Should have the final value
     expect(result.current).toBe('d');
   });
 
@@ -78,13 +70,11 @@ describe('useDebounce', () => {
 
     rerender({ value: 'updated' });
 
-    // Before 300ms
     act(() => {
       vi.advanceTimersByTime(299);
     });
     expect(result.current).toBe('initial');
 
-    // At 300ms
     act(() => {
       vi.advanceTimersByTime(1);
     });
@@ -92,7 +82,6 @@ describe('useDebounce', () => {
   });
 
   it('should work with different types', () => {
-    // Number
     const { result: numResult, rerender: numRerender } = renderHook(
       ({ value }) => useDebounce(value, 100),
       { initialProps: { value: 1 } }

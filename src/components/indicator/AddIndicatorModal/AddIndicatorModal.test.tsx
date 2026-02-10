@@ -17,7 +17,6 @@ describe('AddIndicatorModal', () => {
   it('renders when isOpen is true', () => {
     render(<AddIndicatorModal {...defaultProps} />);
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    // Check for the modal title (h2 element)
     expect(screen.getByRole('heading', { name: 'Add Indicator' })).toBeInTheDocument();
   });
 
@@ -36,7 +35,6 @@ describe('AddIndicatorModal', () => {
   it('calls onClose when clicking outside modal', () => {
     render(<AddIndicatorModal {...defaultProps} />);
 
-    // Click on the overlay (the backdrop)
     const overlay = screen.getByRole('dialog').parentElement;
     if (overlay) {
       fireEvent.click(overlay);
@@ -98,11 +96,9 @@ describe('AddIndicatorModal', () => {
   it('enables submit button when all required fields are filled', async () => {
     render(<AddIndicatorModal {...defaultProps} />);
 
-    // Fill in required fields
     const valueInput = screen.getByPlaceholderText('Enter IP, domain, hash, or URL...');
     fireEvent.change(valueInput, { target: { value: '10.0.0.1' } });
 
-    // Type is auto-detected, but we need to select severity
     const selects = screen.getAllByRole('combobox');
     const severitySelect = selects[1]!; // Second select is severity
     fireEvent.change(severitySelect, { target: { value: 'critical' } });
@@ -122,7 +118,6 @@ describe('AddIndicatorModal', () => {
   it('calls onAdd with correct data when form is submitted', async () => {
     render(<AddIndicatorModal {...defaultProps} />);
 
-    // Fill in required fields
     const valueInput = screen.getByPlaceholderText('Enter IP, domain, hash, or URL...');
     fireEvent.change(valueInput, { target: { value: '10.0.0.1' } });
 
@@ -134,7 +129,6 @@ describe('AddIndicatorModal', () => {
     fireEvent.change(tagInput, { target: { value: 'botnet' } });
     fireEvent.keyDown(tagInput, { key: 'Enter' });
 
-    // Submit
     await waitFor(() => {
       const submitButton = screen.getByRole('button', { name: 'Add Indicator' });
       expect(submitButton).not.toBeDisabled();
@@ -157,24 +151,19 @@ describe('AddIndicatorModal', () => {
   it('keeps confidence independent from severity', async () => {
     render(<AddIndicatorModal {...defaultProps} />);
 
-    // Default confidence is 50
     expect(screen.getByText('50')).toBeInTheDocument();
 
     const selects = screen.getAllByRole('combobox');
     const severitySelect = selects[1]!;
 
-    // Change severity - confidence should NOT change
     fireEvent.change(severitySelect, { target: { value: 'critical' } });
-    
-    // Confidence should still be 50 (unchanged)
+
     expect(screen.getByText('50')).toBeInTheDocument();
   });
 
   it('shows validation errors when submitting with empty fields', async () => {
     render(<AddIndicatorModal {...defaultProps} />);
 
-    // Try to submit the form by clicking the submit button
-    // The button is disabled, but we can still test validation by filling partial data
     const valueInput = screen.getByPlaceholderText('Enter IP, domain, hash, or URL...');
     fireEvent.change(valueInput, { target: { value: '10.0.0.1' } });
 
@@ -182,8 +171,6 @@ describe('AddIndicatorModal', () => {
     const severitySelect = selects[1]!;
     fireEvent.change(severitySelect, { target: { value: 'high' } });
 
-    // Don't add tags - this should cause validation error
-    // Submit button should still be disabled because tags are missing
     const submitButton = screen.getByRole('button', { name: 'Add Indicator' });
     expect(submitButton).toBeDisabled();
   });
@@ -191,13 +178,10 @@ describe('AddIndicatorModal', () => {
   it('expands optional fields section when clicked', async () => {
     render(<AddIndicatorModal {...defaultProps} />);
 
-    // Optional fields should be hidden initially
     expect(screen.queryByText('First Seen')).not.toBeInTheDocument();
 
-    // Click to expand
     fireEvent.click(screen.getByText('Additional Fields (Optional)'));
 
-    // Optional fields should now be visible
     await waitFor(() => {
       expect(screen.getByText('First Seen')).toBeInTheDocument();
       expect(screen.getByText('Provider')).toBeInTheDocument();
@@ -209,17 +193,13 @@ describe('AddIndicatorModal', () => {
   it('resets form when modal reopens', async () => {
     const { rerender } = render(<AddIndicatorModal {...defaultProps} />);
 
-    // Fill in some data
     const input = screen.getByPlaceholderText('Enter IP, domain, hash, or URL...');
     fireEvent.change(input, { target: { value: '10.0.0.1' } });
 
-    // Close modal
     rerender(<AddIndicatorModal {...defaultProps} isOpen={false} />);
 
-    // Reopen modal
     rerender(<AddIndicatorModal {...defaultProps} isOpen={true} />);
 
-    // Form should be reset
     await waitFor(() => {
       const newInput = screen.getByPlaceholderText('Enter IP, domain, hash, or URL...');
       expect(newInput).toHaveValue('');

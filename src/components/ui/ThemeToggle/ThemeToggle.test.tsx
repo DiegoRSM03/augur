@@ -65,7 +65,6 @@ describe('ThemeToggle', () => {
     renderWithProvider();
 
     const button = screen.getByRole('button');
-    // Default is dark mode, so aria-label should say "Switch to light mode"
     expect(button).toHaveAttribute('aria-label', 'Switch to light mode');
   });
 
@@ -73,12 +72,10 @@ describe('ThemeToggle', () => {
     renderWithProvider();
 
     const button = screen.getByRole('button');
-    
-    // Initial state: dark mode
+
     expect(button).toHaveAttribute('aria-label', 'Switch to light mode');
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
 
-    // Click to switch to light mode
     await act(async () => {
       button.click();
     });
@@ -86,7 +83,6 @@ describe('ThemeToggle', () => {
     expect(button).toHaveAttribute('aria-label', 'Switch to dark mode');
     expect(document.documentElement.getAttribute('data-theme')).toBe('light');
 
-    // Click to switch back to dark mode
     await act(async () => {
       button.click();
     });
@@ -110,11 +106,9 @@ describe('ThemeToggle', () => {
   it('displays moon icon in dark mode', () => {
     renderWithProvider();
 
-    // In dark mode, we should see the moon icon
     const button = screen.getByRole('button');
     const svg = button.querySelector('svg');
     expect(svg).toBeInTheDocument();
-    // Moon icon has a specific path
     expect(svg?.querySelector('path')).toBeInTheDocument();
   });
 
@@ -127,15 +121,12 @@ describe('ThemeToggle', () => {
       button.click();
     });
 
-    // Wait for animation to complete
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 300));
     });
 
-    // In light mode, we should see the sun icon
     const svg = button.querySelector('svg');
     expect(svg).toBeInTheDocument();
-    // Sun icon has a circle element
     expect(svg?.querySelector('circle')).toBeInTheDocument();
   });
 });
