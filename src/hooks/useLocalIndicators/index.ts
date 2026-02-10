@@ -1,0 +1,1 @@
+export { useLocalIndicators } from './useLocalIndicators';

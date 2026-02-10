@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { fetchIndicatorById } from '../api/indicators';
-import type { Indicator } from '../types/indicator';
+import { fetchIndicatorById } from '../../api/indicators';
+import type { Indicator } from '../../types/indicator';
 
 interface UseIndicatorOptions {
   /** Local indicators to check before fetching from API */

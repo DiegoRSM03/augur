@@ -1,5 +1,5 @@
-import type { Indicator } from '../types/indicator';
-import type { SortConfig } from '../components/table';
+import type { Indicator } from '../../types/indicator';
+import type { SortConfig } from '../../components/table';
 
 const SEVERITY_ORDER = { critical: 0, high: 1, medium: 2, low: 3 } as const;
 

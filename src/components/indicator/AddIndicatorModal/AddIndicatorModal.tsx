@@ -2,7 +2,7 @@ import { Button, Input, Select, TagInput, Slider, Combobox, ChevronIcon, Warning
 import { getIndicatorTypeLabel } from '../../../utils/detectIndicatorType';
 import type { Indicator, IndicatorType, Severity } from '../../../types/indicator';
 import { useAddIndicatorForm } from './useAddIndicatorForm';
-import { PREDEFINED_SOURCES, SEVERITY_OPTIONS, TYPE_OPTIONS } from './constants';
+import { PREDEFINED_SOURCES, SEVERITY_OPTIONS, TYPE_OPTIONS, type FormState } from './constants';
 
 interface AddIndicatorModalProps {
   isOpen: boolean;
@@ -28,7 +28,7 @@ export function AddIndicatorModal({
     isFormValid,
     handleSubmit,
     handleBlur,
-  } = useAddIndicatorForm({ isOpen, existingValues, onClose, onAdd });
+  } = useAddIndicatorForm({ isOpen, existingValues, onAdd });
 
   return (
     <Modal
@@ -301,28 +301,8 @@ function DateTimeField({
 interface OptionalFieldsSectionProps {
   showOptional: boolean;
   onToggle: () => void;
-  form: {
-    firstSeen: string;
-    lastSeen: string;
-    provider: string;
-    source: string;
-    reports: number;
-    confidence: number;
-    relatedCampaigns: string;
-  };
-  setForm: React.Dispatch<React.SetStateAction<{
-    value: string;
-    type: string;
-    severity: string;
-    confidence: number;
-    source: string;
-    tags: string[];
-    lastSeen: string;
-    firstSeen: string;
-    provider: string;
-    reports: number;
-    relatedCampaigns: string;
-  }>>;
+  form: FormState;
+  setForm: React.Dispatch<React.SetStateAction<FormState>>;
 }
 
 function OptionalFieldsSection({ showOptional, onToggle, form, setForm }: OptionalFieldsSectionProps) {

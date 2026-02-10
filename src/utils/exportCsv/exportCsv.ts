@@ -1,4 +1,4 @@
-import type { Indicator } from '../types/indicator';
+import type { Indicator } from '../../types/indicator';
 
 function escapeCSVValue(value: string | number): string {
   const stringValue = String(value);

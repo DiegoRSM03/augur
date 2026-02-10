@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useSelection } from './useSelection';
-import type { Indicator } from '../types/indicator';
+import type { Indicator } from '../../types/indicator';
 
 // Helper to create mock indicators
 const createMockIndicator = (id: string, overrides: Partial<Indicator> = {}): Indicator => ({

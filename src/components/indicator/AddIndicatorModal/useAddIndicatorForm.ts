@@ -13,14 +13,12 @@ function getCurrentDateTimeLocal(): string {
 interface UseAddIndicatorFormParams {
   isOpen: boolean;
   existingValues: string[];
-  onClose: () => void;
   onAdd: (indicator: Omit<Indicator, 'id'>) => void;
 }
 
 export function useAddIndicatorForm({
   isOpen,
   existingValues,
-  onClose,
   onAdd,
 }: UseAddIndicatorFormParams) {
   const now = getCurrentDateTimeLocal();

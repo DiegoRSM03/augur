@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { exportIndicatorsToCsv } from './exportCsv';
-import type { Indicator } from '../types/indicator';
+import type { Indicator } from '../../types/indicator';
 
 // Declare global for Node.js environment
 declare const global: typeof globalThis;

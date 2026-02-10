@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import type { Indicator } from '../types/indicator';
+import type { Indicator } from '../../types/indicator';
 
 /**
  * Generate a UUID v4

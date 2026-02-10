@@ -2,7 +2,7 @@
  * Utility functions for formatting data in the dashboard
  */
 
-import type { IndicatorType } from '../types/indicator';
+import type { IndicatorType } from '../../types/indicator';
 
 export type TagColor = 'red' | 'blue' | 'purple' | 'teal' | 'gray';
 

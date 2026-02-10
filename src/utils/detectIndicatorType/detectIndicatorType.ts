@@ -1,4 +1,4 @@
-import type { IndicatorType } from '../types/indicator';
+import type { IndicatorType } from '../../types/indicator';
 
 const IP_PATTERN = /^(\d{1,3}\.){3}\d{1,3}$/;
 const DOMAIN_PATTERN = /^([a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;

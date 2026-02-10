@@ -3,11 +3,11 @@ import { renderHook } from '@testing-library/react';
 import { useBreakpoint } from './useBreakpoint';
 
 // Mock useMediaQuery to control breakpoint thresholds
-vi.mock('./useMediaQuery', () => ({
+vi.mock('../useMediaQuery', () => ({
   useMediaQuery: vi.fn(),
 }));
 
-import { useMediaQuery } from './useMediaQuery';
+import { useMediaQuery } from '../useMediaQuery';
 
 const mockUseMediaQuery = vi.mocked(useMediaQuery);
 
