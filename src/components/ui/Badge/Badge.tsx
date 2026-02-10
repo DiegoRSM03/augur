@@ -1,4 +1,4 @@
-import type { Severity } from '../../types/indicator';
+import type { Severity } from '../../../types/indicator';
 
 interface BadgeProps {
   severity: Severity;

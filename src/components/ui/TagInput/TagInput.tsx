@@ -1,6 +1,6 @@
 import { useState, useCallback, type KeyboardEvent, type ChangeEvent } from 'react';
-import { Tag } from './Tag';
-import { CloseIcon } from './icons';
+import { Tag } from '../Tag';
+import { CloseIcon } from '../icons';
 
 interface TagInputProps {
   tags: string[];

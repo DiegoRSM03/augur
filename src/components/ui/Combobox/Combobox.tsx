@@ -6,7 +6,7 @@ import {
   type ChangeEvent,
   type KeyboardEvent,
 } from 'react';
-import { ChevronIcon } from './icons';
+import { ChevronIcon } from '../icons';
 
 interface ComboboxProps {
   value: string;

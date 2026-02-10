@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { useTheme } from '../../context/ThemeContext';
-import { MoonIcon, SunIcon } from './icons';
+import { useTheme } from '../../../context/ThemeContext';
+import { MoonIcon, SunIcon } from '../icons';
 
 export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();

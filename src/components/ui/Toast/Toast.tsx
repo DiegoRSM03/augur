@@ -1,5 +1,5 @@
-import type { Toast as ToastData, ToastType } from '../../hooks/useToast';
-import { CloseIcon, SuccessIcon, ErrorCircleIcon, InfoIcon } from './icons';
+import type { Toast as ToastData, ToastType } from '../../../hooks/useToast';
+import { CloseIcon, SuccessIcon, ErrorCircleIcon, InfoIcon } from '../icons';
 
 interface ToastProps {
   toast: ToastData;
