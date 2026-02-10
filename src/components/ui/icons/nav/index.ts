@@ -1,0 +1,9 @@
+export { ActorsIcon } from './ActorsIcon';
+export { AnalyticsIcon } from './AnalyticsIcon';
+export { CampaignsIcon } from './CampaignsIcon';
+export { DashboardIcon } from './DashboardIcon';
+export { EventsIcon } from './EventsIcon';
+export { IntegrationsIcon } from './IntegrationsIcon';
+export { InvestigateIcon } from './InvestigateIcon';
+export { ReportsIcon } from './ReportsIcon';
+export { ThreatIcon } from './ThreatIcon';

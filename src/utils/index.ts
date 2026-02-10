@@ -14,3 +14,5 @@ export {
   detectIndicatorType,
   getIndicatorTypeLabel,
 } from './detectIndicatorType';
+
+export { sortIndicators } from './sortIndicators';

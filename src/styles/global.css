@@ -1,12 +1,13 @@
 @import "tailwindcss";
 @config "../../tailwind.config.js";
 
-/* Fix spacing scale: Tailwind v4 defaults to 0.25rem per unit,
-   but our html font-size is 14px (not 16px), making rem-based
-   spacing ~12.5% smaller than intended. Using 4px ensures spacing
-   utilities match the design reference pixel values exactly. */
+/* Custom breakpoints: mobile-first responsive design */
 @theme {
   --spacing: 4px;
+  --breakpoint-sm: 481px;
+  --breakpoint-md: 769px;
+  --breakpoint-lg: 1025px;
+  --breakpoint-xl: 1441px;
 }
 
 /* Base layer overrides */
@@ -191,7 +192,7 @@
     --color-confidence-fill: #2563eb;
 
     /* Input */
-    --color-input: #f1f5f9;
+    --color-input: #e2e8f0;
 
     /* Sidebar */
     --color-sidebar-bg: #ffffff;

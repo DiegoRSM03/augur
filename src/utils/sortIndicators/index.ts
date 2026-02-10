@@ -1,0 +1,1 @@
+export { sortIndicators } from './sortIndicators';
