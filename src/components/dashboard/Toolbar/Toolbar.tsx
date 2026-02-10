@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Input, Select, Button } from '../ui';
-import { SearchIcon, FilterIcon } from '../ui/icons';
-import type { IndicatorType, Severity } from '../../types/indicator';
+import { Input, Select, Button } from '../../ui';
+import { SearchIcon, FilterIcon } from '../../ui/icons';
+import type { IndicatorType, Severity } from '../../../types/indicator';
 
 interface ToolbarFilters {
   search: string;

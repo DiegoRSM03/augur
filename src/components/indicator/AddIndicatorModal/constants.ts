@@ -1,4 +1,4 @@
-import type { IndicatorType, Severity } from '../../types/indicator';
+import type { IndicatorType, Severity } from '../../../types/indicator';
 
 export const PREDEFINED_SOURCES = [
   'AbuseIPDB',

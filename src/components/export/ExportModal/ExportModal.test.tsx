@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { ExportModal } from './ExportModal';
-import type { Indicator } from '../../types/indicator';
+import type { Indicator } from '../../../types/indicator';
 
 describe('ExportModal', () => {
   const createMockIndicator = (overrides: Partial<Indicator> = {}): Indicator => ({

@@ -1,8 +1,8 @@
-import type { Indicator } from '../../types/indicator';
-import { Skeleton, Button } from '../ui';
-import { SearchMinusIcon } from '../ui/icons';
-import { TableHeader, type SortConfig, type SortColumn } from './TableHeader';
-import { TableRow } from './TableRow';
+import type { Indicator } from '../../../types/indicator';
+import { Skeleton, Button } from '../../ui';
+import { SearchMinusIcon } from '../../ui/icons';
+import { TableHeader, type SortConfig, type SortColumn } from '../TableHeader';
+import { TableRow } from '../TableRow';
 
 interface DataTableProps {
   data: Indicator[];

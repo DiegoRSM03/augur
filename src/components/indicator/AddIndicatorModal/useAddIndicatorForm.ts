@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useMemo, type FormEvent } from 'react';
-import { detectIndicatorType } from '../../utils/detectIndicatorType';
-import type { Indicator, IndicatorType, Severity } from '../../types/indicator';
+import { detectIndicatorType } from '../../../utils/detectIndicatorType';
+import type { Indicator, IndicatorType, Severity } from '../../../types/indicator';
 import type { FormState, FormErrors } from './constants';
 
 function getCurrentDateTimeLocal(): string {

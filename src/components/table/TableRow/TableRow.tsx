@@ -1,7 +1,7 @@
 import { motion, useReducedMotion } from 'motion/react';
-import type { Indicator } from '../../types/indicator';
-import { Badge, Tag, ConfidenceBar } from '../ui';
-import { formatRelativeTime, getTagColor, getTypeIcon, getTypeLabel } from '../../utils/formatters';
+import type { Indicator } from '../../../types/indicator';
+import { Badge, Tag, ConfidenceBar } from '../../ui';
+import { formatRelativeTime, getTagColor, getTypeIcon, getTypeLabel } from '../../../utils/formatters';
 
 interface TableRowProps {
   indicator: Indicator;

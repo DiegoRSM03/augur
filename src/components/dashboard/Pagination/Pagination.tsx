@@ -1,4 +1,4 @@
-import { useBreakpoint } from '../../hooks/useBreakpoint';
+import { useBreakpoint } from '../../../hooks/useBreakpoint';
 
 interface PaginationProps {
   page: number;

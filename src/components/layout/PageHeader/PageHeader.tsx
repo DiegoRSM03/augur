@@ -1,5 +1,5 @@
-import { Button, ThemeToggle } from '../ui';
-import { HamburgerIcon, DownloadIcon, PlusIcon } from '../ui/icons';
+import { Button, ThemeToggle } from '../../ui';
+import { HamburgerIcon, DownloadIcon, PlusIcon } from '../../ui/icons';
 
 interface PageHeaderProps {
   title: string;

@@ -1,14 +1,14 @@
 import { motion } from 'motion/react';
-import type { Indicator } from '../../types/indicator';
-import { Badge, Tag, Button, CloseIcon } from '../ui';
+import type { Indicator } from '../../../types/indicator';
+import { Badge, Tag, Button, CloseIcon } from '../../ui';
 import {
   formatRelativeTime,
   getTagColor,
   getTypeIcon,
   getTypeLabel,
-} from '../../utils/formatters';
-import { DetailSkeleton } from './DetailSkeleton';
-import { DetailError } from './DetailError';
+} from '../../../utils/formatters';
+import { DetailSkeleton } from '../DetailSkeleton';
+import { DetailError } from '../DetailError';
 
 interface DetailPanelProps {
   indicator: Indicator | null;

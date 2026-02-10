@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Pagination } from './Pagination';
 
 // Mock useBreakpoint to return desktop mode by default
-vi.mock('../../hooks/useBreakpoint', () => ({
+vi.mock('../../../hooks/useBreakpoint', () => ({
   useBreakpoint: () => ({
     isMobile: false,
     isTablet: false,

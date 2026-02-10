@@ -1,6 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
-import type { Indicator } from '../../types/indicator';
-import { Badge, Button, Modal } from '../ui';
+import type { Indicator } from '../../../types/indicator';
+import { Badge, Button, Modal } from '../../ui';
 
 interface ExportModalProps {
   indicators: Indicator[];

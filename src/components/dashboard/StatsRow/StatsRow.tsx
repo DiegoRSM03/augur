@@ -1,9 +1,9 @@
 import { motion, useReducedMotion } from 'motion/react';
-import { useStats } from '../../hooks/useStats';
-import { Skeleton } from '../ui';
-import { ShieldIcon } from '../ui/icons';
-import { StatCard } from './StatCard';
-import type { Severity } from '../../types/indicator';
+import { useStats } from '../../../hooks/useStats';
+import { Skeleton } from '../../ui';
+import { ShieldIcon } from '../../ui/icons';
+import { StatCard } from '../StatCard';
+import type { Severity } from '../../../types/indicator';
 
 type StatVariant = 'total' | Severity;
 

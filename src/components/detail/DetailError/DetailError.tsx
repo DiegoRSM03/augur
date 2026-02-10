@@ -1,5 +1,5 @@
-import { Button } from '../ui';
-import { AlertCircleIcon } from '../ui/icons';
+import { Button } from '../../ui';
+import { AlertCircleIcon } from '../../ui/icons';
 
 interface DetailErrorProps {
   message: string;

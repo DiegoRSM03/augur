@@ -1,6 +1,6 @@
-import { Button, Input, Select, TagInput, Slider, Combobox, ChevronIcon, WarningIcon, Modal } from '../ui';
-import { getIndicatorTypeLabel } from '../../utils/detectIndicatorType';
-import type { Indicator, IndicatorType, Severity } from '../../types/indicator';
+import { Button, Input, Select, TagInput, Slider, Combobox, ChevronIcon, WarningIcon, Modal } from '../../ui';
+import { getIndicatorTypeLabel } from '../../../utils/detectIndicatorType';
+import type { Indicator, IndicatorType, Severity } from '../../../types/indicator';
 import { useAddIndicatorForm } from './useAddIndicatorForm';
 import { PREDEFINED_SOURCES, SEVERITY_OPTIONS, TYPE_OPTIONS } from './constants';
 

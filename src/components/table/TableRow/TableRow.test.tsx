@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { TableRow } from './TableRow';
-import type { Indicator } from '../../types/indicator';
+import type { Indicator } from '../../../types/indicator';
 
 // Mock motion/react to render plain elements in tests
 vi.mock('motion/react', () => ({
@@ -17,7 +17,7 @@ vi.mock('motion/react', () => ({
 }));
 
 // Mock the formatters module
-vi.mock('../../utils/formatters', () => ({
+vi.mock('../../../utils/formatters', () => ({
   formatRelativeTime: () => '2 min ago',
   getTagColor: (tag: string) => {
     if (tag.includes('malware') || tag.includes('tor')) return 'red';

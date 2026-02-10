@@ -1,6 +1,6 @@
 import { useReducedMotion } from 'motion/react';
-import type { Severity } from '../../types/indicator';
-import { useCountUp } from '../../hooks/useCountUp';
+import type { Severity } from '../../../types/indicator';
+import { useCountUp } from '../../../hooks/useCountUp';
 
 type StatVariant = 'total' | Severity;
 
