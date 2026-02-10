@@ -1,5 +1,6 @@
 import { NavSection } from './NavSection';
-import { navSections, AugurLogo } from './navConfig';
+import { navSections } from './navConfig';
+import { AugurLogo } from '../../ui/icons';
 
 interface SidebarContentProps {
   onNavigate?: () => void;

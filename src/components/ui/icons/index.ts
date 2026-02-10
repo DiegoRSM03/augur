@@ -1,4 +1,5 @@
 export { AlertCircleIcon } from './AlertCircleIcon';
+export { AugurLogo } from './AugurLogo';
 export { ChevronIcon } from './ChevronIcon';
 export { CloseIcon } from './CloseIcon';
 export { DownloadIcon } from './DownloadIcon';
