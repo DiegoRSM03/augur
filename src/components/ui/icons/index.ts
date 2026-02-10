@@ -1,2 +1,12 @@
-export { CloseIcon } from './CloseIcon';
 export { ChevronIcon } from './ChevronIcon';
+export { CloseIcon } from './CloseIcon';
+export { DownloadIcon } from './DownloadIcon';
+export { ErrorCircleIcon } from './ErrorCircleIcon';
+export { FilterIcon } from './FilterIcon';
+export { HamburgerIcon } from './HamburgerIcon';
+export { InfoIcon } from './InfoIcon';
+export { MoonIcon } from './MoonIcon';
+export { PlusIcon } from './PlusIcon';
+export { SearchIcon } from './SearchIcon';
+export { SuccessIcon } from './SuccessIcon';
+export { SunIcon } from './SunIcon';

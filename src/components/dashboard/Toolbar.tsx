@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Input, Select, Button } from '../ui';
+import { SearchIcon, FilterIcon } from '../ui/icons';
 import type { IndicatorType, Severity } from '../../types/indicator';
 
 interface ToolbarFilters {
@@ -21,41 +22,6 @@ interface ToolbarProps {
   selectedCount?: number;
 }
 
-/**
- * Search icon component
- */
-function SearchIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className="w-full h-full"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <line x1="21" y1="21" x2="16.65" y2="16.65" />
-    </svg>
-  );
-}
-
-/**
- * Filter/funnel icon for the mobile filter toggle
- */
-function FilterIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className="w-4 h-4"
-    >
-      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-    </svg>
-  );
-}
-
 const severityOptions = [
   { value: '', label: 'All Severities' },
   { value: 'critical', label: 'Critical' },
@@ -72,9 +38,6 @@ const typeOptions = [
   { value: 'url', label: 'URL' },
 ];
 
-/**
- * Selection count badge component
- */
 function SelectionBadge({ count }: { count: number }) {
   return (
     <span
@@ -92,9 +55,6 @@ function SelectionBadge({ count }: { count: number }) {
   );
 }
 
-/**
- * Filter dropdowns shared between mobile and desktop layouts
- */
 function FilterDropdowns({
   filters,
   sourceOptions,

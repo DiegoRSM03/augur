@@ -1,67 +1,27 @@
 import type { Toast as ToastData, ToastType } from '../../hooks/useToast';
-import { CloseIcon } from './icons';
+import { CloseIcon, SuccessIcon, ErrorCircleIcon, InfoIcon } from './icons';
 
 interface ToastProps {
   toast: ToastData;
   onDismiss: (id: string) => void;
 }
 
-function SuccessIcon() {
-  return (
-    <svg
-      className="w-5 h-5 text-status-active"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
-      <polyline points="22 4 12 14.01 9 11.01" />
-    </svg>
-  );
-}
-
-function ErrorIcon() {
-  return (
-    <svg
-      className="w-5 h-5 text-severity-critical"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="15" y1="9" x2="9" y2="15" />
-      <line x1="9" y1="9" x2="15" y2="15" />
-    </svg>
-  );
-}
-
-function InfoIcon() {
-  return (
-    <svg
-      className="w-5 h-5 text-augur-blue"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
-      <circle cx="12" cy="12" r="10" />
-      <line x1="12" y1="16" x2="12" y2="12" />
-      <line x1="12" y1="8" x2="12.01" y2="8" />
-    </svg>
-  );
-}
+const TOAST_ICON_STYLES: Record<ToastType, string> = {
+  success: 'text-status-active',
+  error: 'text-severity-critical',
+  info: 'text-augur-blue',
+};
 
 function getIcon(type: ToastType) {
+  const className = `w-5 h-5 ${TOAST_ICON_STYLES[type]}`;
   switch (type) {
     case 'success':
-      return <SuccessIcon />;
+      return <SuccessIcon className={className} />;
     case 'error':
-      return <ErrorIcon />;
+      return <ErrorCircleIcon className={className} />;
     case 'info':
     default:
-      return <InfoIcon />;
+      return <InfoIcon className={className} />;
   }
 }
 
