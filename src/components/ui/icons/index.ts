@@ -10,3 +10,4 @@ export { PlusIcon } from './PlusIcon';
 export { SearchIcon } from './SearchIcon';
 export { SuccessIcon } from './SuccessIcon';
 export { SunIcon } from './SunIcon';
+export { WarningIcon } from './WarningIcon';

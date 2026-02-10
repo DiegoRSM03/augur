@@ -144,29 +144,19 @@ export function useAddIndicatorForm({
     setTouched((prev) => ({ ...prev, [field]: true }));
   }, []);
 
+  // Cmd/Ctrl+Enter to submit
   useEffect(() => {
+    if (!isOpen) return;
+
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      } else if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && isFormValid) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'Enter' && isFormValid) {
         handleSubmit(e as unknown as FormEvent);
       }
     };
 
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      return () => document.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [isOpen, onClose, isFormValid, handleSubmit]);
-
-  const handleOverlayClick = useCallback(
-    (e: React.MouseEvent) => {
-      if (e.target === e.currentTarget) {
-        onClose();
-      }
-    },
-    [onClose]
-  );
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isFormValid, handleSubmit]);
 
   useEffect(() => {
     if (isOpen) {
@@ -201,6 +191,5 @@ export function useAddIndicatorForm({
     isFormValid,
     handleSubmit,
     handleBlur,
-    handleOverlayClick,
   };
 }
