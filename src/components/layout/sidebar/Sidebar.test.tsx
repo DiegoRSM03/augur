@@ -33,7 +33,6 @@ describe('Sidebar', () => {
 
   it('renders nothing when isDrawer is true and isOpen is false', () => {
     const { container } = render(<Sidebar isDrawer={true} isOpen={false} />);
-    // AnimatePresence children should not render
     expect(container.querySelector('[role="dialog"]')).not.toBeInTheDocument();
   });
 

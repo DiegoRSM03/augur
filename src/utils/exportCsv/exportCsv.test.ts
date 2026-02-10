@@ -2,7 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { exportIndicatorsToCsv } from './exportCsv';
 import type { Indicator } from '../../types/indicator';
 
-// Declare global for Node.js environment
 declare const global: typeof globalThis;
 
 describe('exportIndicatorsToCsv', () => {
@@ -10,8 +9,6 @@ describe('exportIndicatorsToCsv', () => {
   let capturedCsvContent: string = '';
 
   beforeEach(() => {
-    // Mock URL methods (not available in jsdom)
-    // We need to capture the blob content synchronously
     vi.stubGlobal('Blob', class MockBlob {
       content: string;
       constructor(parts: BlobPart[]) {
@@ -26,7 +23,6 @@ describe('exportIndicatorsToCsv', () => {
     global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
     global.URL.revokeObjectURL = vi.fn();
 
-    // Mock link element
     mockLink = {
       href: '',
       download: '',
@@ -134,7 +130,6 @@ describe('exportIndicatorsToCsv', () => {
 
     const lines = capturedCsvContent.split('\n');
 
-    // Header + 3 data rows
     expect(lines).toHaveLength(4);
     expect(lines[1]).toContain('id-1');
     expect(lines[2]).toContain('id-2');
@@ -164,7 +159,6 @@ describe('exportIndicatorsToCsv', () => {
 
     const lines = capturedCsvContent.split('\n');
 
-    // Last column should be empty (just the previous column value followed by nothing)
     expect(lines[1]!.endsWith(',') || lines[1]!.split(',').pop() === '').toBe(true);
   });
 

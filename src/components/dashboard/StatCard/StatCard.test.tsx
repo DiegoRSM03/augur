@@ -2,9 +2,8 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { StatCard } from './StatCard';
 
-// Mock motion/react
 vi.mock('motion/react', () => ({
-  useReducedMotion: () => true, // Disable animations in tests for immediate values
+  useReducedMotion: () => true,
 }));
 
 describe('StatCard', () => {

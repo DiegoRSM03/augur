@@ -36,11 +36,9 @@ describe('useStats', () => {
 
     const { result } = renderHook(() => useStats());
 
-    // Initially loading
     expect(result.current.loading).toBe(true);
     expect(result.current.stats).toBeNull();
 
-    // Wait for fetch to complete
     await waitFor(() => {
       expect(result.current.loading).toBe(false);
     });

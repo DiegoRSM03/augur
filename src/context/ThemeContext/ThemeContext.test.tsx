@@ -167,7 +167,6 @@ describe('ThemeContext', () => {
   });
 
   it('throws error when useTheme is used outside provider', () => {
-    // Suppress console.error for this test
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     expect(() => render(<TestConsumer />)).toThrow(

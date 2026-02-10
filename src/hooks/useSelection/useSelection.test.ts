@@ -3,7 +3,6 @@ import { renderHook, act } from '@testing-library/react';
 import { useSelection } from './useSelection';
 import type { Indicator } from '../../types/indicator';
 
-// Helper to create mock indicators
 const createMockIndicator = (id: string, overrides: Partial<Indicator> = {}): Indicator => ({
   id,
   value: `value-${id}`,
@@ -277,7 +276,6 @@ describe('useSelection', () => {
     it('preserves selections from other pages', () => {
       const { result } = renderHook(() => useSelection());
 
-      // Select items from "page 1"
       const page1Indicators = [
         createMockIndicator('page1-id-1'),
         createMockIndicator('page1-id-2'),
@@ -286,7 +284,6 @@ describe('useSelection', () => {
         result.current.selectAll(page1Indicators);
       });
 
-      // Toggle all on "page 2"
       const page2Indicators = [
         createMockIndicator('page2-id-1'),
         createMockIndicator('page2-id-2'),
@@ -295,10 +292,8 @@ describe('useSelection', () => {
         result.current.toggleAllOnPage(page2Indicators);
       });
 
-      // Page 1 selections should persist
       expect(result.current.isSelected('page1-id-1')).toBe(true);
       expect(result.current.isSelected('page1-id-2')).toBe(true);
-      // Page 2 should be selected
       expect(result.current.isSelected('page2-id-1')).toBe(true);
       expect(result.current.isSelected('page2-id-2')).toBe(true);
       expect(result.current.selectedCount).toBe(4);
@@ -319,7 +314,6 @@ describe('useSelection', () => {
       });
 
       expect(result.current.selectedArray).toHaveLength(3);
-      // Check that the full indicator objects are stored
       expect(result.current.selectedArray.find((i) => i.id === 'id-1')).toBeDefined();
       expect(result.current.selectedArray.find((i) => i.id === 'id-2')).toBeDefined();
       expect(result.current.selectedArray.find((i) => i.id === 'id-3')).toBeDefined();

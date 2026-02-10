@@ -152,7 +152,6 @@ describe('ExportModal', () => {
       />
     );
 
-    // Uncheck first and third items
     const checkboxes = screen.getAllByRole('checkbox');
     fireEvent.click(checkboxes[0]!);
     fireEvent.click(checkboxes[2]!);
@@ -190,7 +189,6 @@ describe('ExportModal', () => {
       />
     );
 
-    // Badge component renders lowercase text with CSS capitalize
     expect(screen.getByText('critical')).toBeInTheDocument();
     expect(screen.getByText('high')).toBeInTheDocument();
     expect(screen.getByText('medium')).toBeInTheDocument();
@@ -239,7 +237,6 @@ describe('ExportModal', () => {
       />
     );
 
-    // Click on the overlay (the outermost div)
     const overlay = screen.getByRole('dialog').parentElement;
     expect(overlay).not.toBeNull();
     fireEvent.click(overlay as HTMLElement);
@@ -257,7 +254,6 @@ describe('ExportModal', () => {
       />
     );
 
-    // Click on the modal content
     fireEvent.click(screen.getByRole('dialog'));
 
     expect(onClose).not.toHaveBeenCalled();
@@ -299,7 +295,6 @@ describe('ExportModal', () => {
     expect(checkboxes[0]).toBeChecked();
 
     fireEvent.click(screen.getByText('Export CSV'));
-    // All items should be exported (order may vary due to Set iteration)
     expect(onExport).toHaveBeenCalledTimes(1);
     const exportedIds = onExport.mock.calls[0]![0];
     expect(exportedIds).toHaveLength(3);
