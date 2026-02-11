@@ -1,357 +1,109 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { AppLayout, Sidebar, PageHeader } from './components/layout';
-import { StatsRow, Toolbar, Pagination, type ToolbarFilters } from './components/dashboard';
-import { DataTable, type SortConfig, type SortColumn } from './components/table';
+import { StatsRow, Toolbar, Pagination } from './components/dashboard';
+import { DataTable } from './components/table';
 import { DetailPanel } from './components/detail';
 import { ExportModal } from './components/export';
 import { AddIndicatorModal } from './components/indicator';
 import { ToastContainer } from './components/ui';
-import { useIndicators } from './hooks/useIndicators';
-import { useIndicator } from './hooks/useIndicator';
-import { useDebounce } from './hooks/useDebounce';
-import { useSelection } from './hooks/useSelection';
-import { useToast } from './hooks/useToast';
-import { useLocalIndicators } from './hooks/useLocalIndicators';
-import { useLockBodyScroll } from './hooks/useLockBodyScroll';
-import { useBreakpoint } from './hooks/useBreakpoint';
-import { exportIndicatorsToCsv } from './utils/exportCsv';
-import { sortIndicators } from './utils/sortIndicators';
-import type { IndicatorType, Severity, Indicator } from './types/indicator';
-
-const PAGE_LIMIT = 20;
-
-const KNOWN_SOURCES = [
-  'AbuseIPDB',
-  'VirusTotal',
-  'OTX AlienVault',
-  'Emerging Threats',
-  'Silent Push',
-  'MalwareBazaar',
-  'PhishTank',
-  'GreyNoise',
-  'URLhaus',
-];
+import { useDashboard } from './hooks';
+import { PAGE_LIMIT, KNOWN_SOURCES } from './constants';
 
 function App() {
-  const [filters, setFilters] = useState<ToolbarFilters>({
-    search: '',
-    severity: '',
-    type: '',
-    source: '',
-  });
-
-  const [page, setPage] = useState(1);
-
-  const [sortConfig, setSortConfig] = useState<SortConfig>({
-    column: 'lastSeen',
-    direction: 'desc',
-  });
-
-  const [activeRowId, setActiveRowId] = useState<string | null>(null);
-  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { isMobile, isTablet } = useBreakpoint();
-  const isDrawerMode = isMobile || isTablet;
-
-  useEffect(() => {
-    if (!isDrawerMode) setSidebarOpen(false);
-  }, [isDrawerMode]);
-
-  const handleMenuToggle = useCallback(() => {
-    setSidebarOpen((prev) => !prev);
-  }, []);
-
-  const handleSidebarClose = useCallback(() => {
-    setSidebarOpen(false);
-  }, []);
-
-  useLockBodyScroll(isExportModalOpen || isAddModalOpen);
-
-  const tableWrapperRef = useRef<HTMLDivElement>(null);
-
-  const { localIndicators, addIndicator, localValues } = useLocalIndicators();
-
-  const {
-    selectedIds,
-    selectedArray,
-    selectedCount,
-    toggleSelection,
-    clearSelection,
-    getPageSelectionState,
-    toggleAllOnPage,
-  } = useSelection();
-
-  const { toasts, showToast, dismissToast } = useToast();
-
-  const debouncedSearch = useDebounce(filters.search, 300);
-
-  const apiFilters = useMemo(
-    () => ({
-      search: debouncedSearch || undefined,
-      severity: (filters.severity || undefined) as Severity | undefined,
-      type: (filters.type || undefined) as IndicatorType | undefined,
-      page,
-      limit: PAGE_LIMIT,
-    }),
-    [debouncedSearch, filters.severity, filters.type, page]
-  );
-
-  const {
-    data: rawData,
-    total,
-    totalPages,
-    loading,
-    error,
-    refetch,
-  } = useIndicators(apiFilters);
-
-  const mergedData = useMemo(() => {
-    return [...localIndicators, ...rawData];
-  }, [localIndicators, rawData]);
-
-  // API doesn't support source filter
-  const filteredData = useMemo(() => {
-    if (!filters.source) return mergedData;
-    return mergedData.filter((indicator) => indicator.source === filters.source);
-  }, [mergedData, filters.source]);
-
-  const sortedData = useMemo(
-    () => sortIndicators(filteredData, sortConfig),
-    [filteredData, sortConfig]
-  );
-
-  const currentPageIds = useMemo(
-    () => sortedData.map((indicator) => indicator.id),
-    [sortedData]
-  );
-
-  const { allSelected, someSelected } = useMemo(
-    () => getPageSelectionState(currentPageIds),
-    [getPageSelectionState, currentPageIds]
-  );
-
-  const handleSearchChange = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, search: value }));
-    setPage(1);
-  }, []);
-
-  const handleSeverityChange = useCallback((value: Severity | '') => {
-    setFilters((prev) => ({ ...prev, severity: value }));
-    setPage(1);
-  }, []);
-
-  const handleTypeChange = useCallback((value: IndicatorType | '') => {
-    setFilters((prev) => ({ ...prev, type: value }));
-    setPage(1);
-  }, []);
-
-  const handleSourceChange = useCallback((value: string) => {
-    setFilters((prev) => ({ ...prev, source: value }));
-    setPage(1);
-  }, []);
-
-  const handleClearFilters = useCallback(() => {
-    setFilters({ search: '', severity: '', type: '', source: '' });
-    setPage(1);
-  }, []);
-
-  const handleSort = useCallback((column: SortColumn) => {
-    setSortConfig((prev) => ({
-      column,
-      direction:
-        prev.column === column && prev.direction === 'asc' ? 'desc' : 'asc',
-    }));
-  }, []);
-
-  const handleSelectRow = useCallback(
-    (indicator: Indicator) => {
-      toggleSelection(indicator);
-    },
-    [toggleSelection]
-  );
-
-  const handleRowClick = useCallback((id: string) => {
-    setActiveRowId(id);
-  }, []);
-
-  const handleSelectAll = useCallback(() => {
-    toggleAllOnPage(sortedData);
-  }, [toggleAllOnPage, sortedData]);
-
-  const handlePageChange = useCallback((newPage: number) => {
-    setPage(newPage);
-  }, []);
-
-  const handleClosePanel = useCallback(() => {
-    setActiveRowId(null);
-  }, []);
-
-  const handleExportClick = useCallback(() => {
-    if (selectedCount === 0) {
-      showToast('No indicators selected', 'info');
-      return;
-    }
-    setIsExportModalOpen(true);
-  }, [selectedCount, showToast]);
-
-  const handleExportModalClose = useCallback(() => {
-    setIsExportModalOpen(false);
-  }, []);
-
-  const handleAddIndicatorClick = useCallback(() => {
-    setIsAddModalOpen(true);
-  }, []);
-
-  const handleAddModalClose = useCallback(() => {
-    setIsAddModalOpen(false);
-  }, []);
-
-  const handleAddIndicator = useCallback(
-    (indicatorData: Omit<Indicator, 'id'>) => {
-      addIndicator(indicatorData);
-      setIsAddModalOpen(false);
-      showToast('Indicator added successfully', 'success');
-      setFilters({ search: '', severity: '', type: '', source: '' });
-      setPage(1);
-      setTimeout(() => {
-        tableWrapperRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 100);
-    },
-    [addIndicator, showToast]
-  );
-
-  const existingValues = useMemo(() => {
-    const apiValues = rawData.map((indicator) => indicator.value);
-    return [...localValues, ...apiValues];
-  }, [rawData, localValues]);
-
-  const handleExport = useCallback(
-    (idsToExport: string[]) => {
-      const indicatorsToExport = selectedArray.filter((indicator) =>
-        idsToExport.includes(indicator.id)
-      );
-
-      if (indicatorsToExport.length === 0) {
-        showToast('No indicators to export', 'error');
-        return;
-      }
-
-      exportIndicatorsToCsv(indicatorsToExport);
-      setIsExportModalOpen(false);
-      showToast(
-        `Successfully exported ${indicatorsToExport.length} indicator${indicatorsToExport.length !== 1 ? 's' : ''}`,
-        'success'
-      );
-      clearSelection();
-    },
-    [selectedArray, showToast, clearSelection]
-  );
-
-  const {
-    indicator: activeIndicator,
-    loading: indicatorLoading,
-    error: indicatorError,
-    refetch: refetchIndicator,
-  } = useIndicator(activeRowId, { localIndicators });
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && activeRowId && !isExportModalOpen && !isAddModalOpen) {
-        handleClosePanel();
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [activeRowId, isExportModalOpen, isAddModalOpen, handleClosePanel]);
+  const dashboard = useDashboard({ pageLimit: PAGE_LIMIT });
 
   return (
     <AppLayout>
       <Sidebar
-        isDrawer={isDrawerMode}
-        isOpen={sidebarOpen}
-        onClose={handleSidebarClose}
+        isDrawer={dashboard.sidebar.isDrawer}
+        isOpen={dashboard.sidebar.isOpen}
+        onClose={dashboard.sidebar.close}
       />
+
       <main className="flex flex-col overflow-x-hidden">
         <PageHeader
           title="Threat Intelligence Dashboard"
           subtitle="Real-time threat indicators and campaign intelligence"
-          onExport={handleExportClick}
-          onAddIndicator={handleAddIndicatorClick}
-          onMenuToggle={handleMenuToggle}
+          onExport={dashboard.exportModal.onExportClick}
+          onAddIndicator={dashboard.addModal.open}
+          onMenuToggle={dashboard.sidebar.toggle}
         />
 
         <StatsRow />
 
         <Toolbar
-          filters={filters}
-          onSearchChange={handleSearchChange}
-          onSeverityChange={handleSeverityChange}
-          onTypeChange={handleTypeChange}
-          onSourceChange={handleSourceChange}
-          onClearFilters={handleClearFilters}
+          filters={dashboard.filters.values}
+          onSearchChange={dashboard.filters.setSearch}
+          onSeverityChange={dashboard.filters.setSeverity}
+          onTypeChange={dashboard.filters.setType}
+          onSourceChange={dashboard.filters.setSource}
+          onClearFilters={dashboard.filters.clear}
           sources={KNOWN_SOURCES}
-          selectedCount={selectedCount}
+          selectedCount={dashboard.selection.count}
         />
 
         <div className="flex flex-1">
-          <div ref={tableWrapperRef} className="flex flex-col flex-1 relative overflow-auto">
+          <div
+            ref={dashboard.refs.tableWrapper}
+            className="flex flex-col flex-1 relative overflow-auto"
+          >
             <DataTable
-              data={sortedData}
-              loading={loading}
-              error={error}
-              selectedIds={selectedIds}
-              activeRowId={activeRowId}
-              sortConfig={sortConfig}
-              page={page}
-              onSort={handleSort}
-              onSelectRow={handleSelectRow}
-              onRowClick={handleRowClick}
-              onSelectAll={handleSelectAll}
-              allSelected={allSelected}
-              someSelected={someSelected}
-              onClearFilters={handleClearFilters}
-              onRetry={refetch}
+              data={dashboard.table.data}
+              loading={dashboard.table.loading}
+              error={dashboard.table.error}
+              selectedIds={dashboard.table.selectedIds}
+              activeRowId={dashboard.detailPanel.activeRowId}
+              sortConfig={dashboard.table.sortConfig}
+              page={dashboard.table.page}
+              onSort={dashboard.table.onSort}
+              onSelectRow={dashboard.table.onSelectRow}
+              onRowClick={dashboard.detailPanel.open}
+              onSelectAll={dashboard.table.onSelectAll}
+              allSelected={dashboard.table.allSelected}
+              someSelected={dashboard.table.someSelected}
+              onClearFilters={dashboard.filters.clear}
+              onRetry={dashboard.table.refetch}
             />
 
             <Pagination
-              page={page}
-              totalPages={totalPages}
-              total={total}
-              limit={PAGE_LIMIT}
-              onPageChange={handlePageChange}
+              page={dashboard.pagination.page}
+              totalPages={dashboard.pagination.totalPages}
+              total={dashboard.pagination.total}
+              limit={dashboard.pagination.limit}
+              onPageChange={dashboard.pagination.onPageChange}
             />
           </div>
 
-          {activeRowId && (
+          {dashboard.detailPanel.isOpen && (
             <DetailPanel
-              indicator={activeIndicator}
-              loading={indicatorLoading}
-              error={indicatorError}
-              onClose={handleClosePanel}
-              onRetry={refetchIndicator}
+              indicator={dashboard.detailPanel.indicator}
+              loading={dashboard.detailPanel.loading}
+              error={dashboard.detailPanel.error}
+              onClose={dashboard.detailPanel.close}
+              onRetry={dashboard.detailPanel.refetch}
             />
           )}
         </div>
       </main>
 
-      {isExportModalOpen && (
+      {dashboard.exportModal.isOpen && (
         <ExportModal
-          indicators={selectedArray}
-          onClose={handleExportModalClose}
-          onExport={handleExport}
+          indicators={dashboard.selection.array}
+          onClose={dashboard.exportModal.close}
+          onExport={dashboard.exportModal.onExport}
         />
       )}
 
       <AddIndicatorModal
-        isOpen={isAddModalOpen}
-        existingValues={existingValues}
-        onClose={handleAddModalClose}
-        onAdd={handleAddIndicator}
+        isOpen={dashboard.addModal.isOpen}
+        existingValues={dashboard.addModal.existingValues}
+        onClose={dashboard.addModal.close}
+        onAdd={dashboard.addModal.onAdd}
       />
 
-      <ToastContainer toasts={toasts} onDismiss={dismissToast} />
+      <ToastContainer
+        toasts={dashboard.toast.toasts}
+        onDismiss={dashboard.toast.dismiss}
+      />
     </AppLayout>
   );
 }

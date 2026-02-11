@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchIndicators } from '../../api/indicators';
+import { fetchIndicators } from '../../api';
 import type { Indicator, IndicatorFilters, PaginatedResponse } from '../../types/indicator';
 
 interface UseIndicatorsReturn {

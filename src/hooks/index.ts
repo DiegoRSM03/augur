@@ -1,12 +1,19 @@
 export { useBreakpoint } from './useBreakpoint';
 export { useCountUp } from './useCountUp';
+export { useDashboard } from './useDashboard';
+export { useDashboardActions } from './useDashboardActions';
+export { useDashboardData } from './useDashboardData';
 export { useDebounce } from './useDebounce';
+export { useDetailPanel } from './useDetailPanel';
+export { useDisclosure } from './useDisclosure';
+export { useFilters } from './useFilters';
 export { useIndicator } from './useIndicator';
 export { useIndicators } from './useIndicators';
 export { useLocalIndicators } from './useLocalIndicators';
 export { useLockBodyScroll } from './useLockBodyScroll';
 export { useMediaQuery } from './useMediaQuery';
 export { useSelection } from './useSelection';
+export { useSortState } from './useSortState';
 export { useStats } from './useStats';
 export { useToast } from './useToast';
 

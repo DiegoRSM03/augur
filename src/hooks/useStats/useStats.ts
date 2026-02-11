@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchStats } from '../../api/indicators';
+import { fetchStats } from '../../api';
 import type { Stats } from '../../types/stats';
 
 interface UseStatsReturn {
