@@ -15,4 +15,6 @@ export {
   getIndicatorTypeLabel,
 } from './detectIndicatorType';
 
+export { exportIndicatorsToCsv } from './exportCsv';
+
 export { sortIndicators } from './sortIndicators';

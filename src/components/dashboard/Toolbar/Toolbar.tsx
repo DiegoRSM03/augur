@@ -2,14 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Input, Select, Button } from '../../ui';
 import { SearchIcon, FilterIcon } from '../../ui/icons';
-import type { IndicatorType, Severity } from '../../../types/indicator';
-
-interface ToolbarFilters {
-  search: string;
-  severity: Severity | '';
-  type: IndicatorType | '';
-  source: string;
-}
+import type { IndicatorType, Severity, ToolbarFilters } from '../../../types';
 
 interface ToolbarProps {
   filters: ToolbarFilters;
@@ -18,7 +11,7 @@ interface ToolbarProps {
   onTypeChange: (value: IndicatorType | '') => void;
   onSourceChange: (value: string) => void;
   onClearFilters: () => void;
-  sources?: string[];
+  sources?: readonly string[];
   selectedCount?: number;
 }
 
@@ -203,4 +196,4 @@ export function Toolbar({
   );
 }
 
-export type { ToolbarFilters };
+export type { ToolbarFilters } from '../../../types';

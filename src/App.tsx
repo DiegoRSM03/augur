@@ -6,20 +6,7 @@ import { ExportModal } from './components/export';
 import { AddIndicatorModal } from './components/indicator';
 import { ToastContainer } from './components/ui';
 import { useDashboard } from './hooks';
-
-const PAGE_LIMIT = 20;
-
-const KNOWN_SOURCES = [
-  'AbuseIPDB',
-  'VirusTotal',
-  'OTX AlienVault',
-  'Emerging Threats',
-  'Silent Push',
-  'MalwareBazaar',
-  'PhishTank',
-  'GreyNoise',
-  'URLhaus',
-];
+import { PAGE_LIMIT, KNOWN_SOURCES } from './constants';
 
 function App() {
   const dashboard = useDashboard({ pageLimit: PAGE_LIMIT });

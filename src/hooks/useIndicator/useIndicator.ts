@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { fetchIndicatorById } from '../../api/indicators';
+import { fetchIndicatorById } from '../../api';
 import type { Indicator } from '../../types/indicator';
 
 interface UseIndicatorOptions {

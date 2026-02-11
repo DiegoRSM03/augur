@@ -1,15 +1,12 @@
 /**
- * API Client for Threat Intelligence Dashboard
- *
- * All API calls go through the Vite proxy to /api
+ * Indicators API Client
  */
 
 import type {
   Indicator,
   IndicatorFilters,
   PaginatedResponse,
-} from '../types/indicator';
-import type { Stats } from '../types/stats';
+} from '../../types/indicator';
 
 const API_BASE = '/api';
 
@@ -60,19 +57,6 @@ export async function fetchIndicatorById(id: string): Promise<Indicator> {
       throw new Error('Indicator not found');
     }
     throw new Error(`Failed to fetch indicator: ${response.statusText}`);
-  }
-
-  return response.json();
-}
-
-/**
- * Fetch dashboard statistics
- */
-export async function fetchStats(): Promise<Stats> {
-  const response = await fetch(`${API_BASE}/stats`);
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch stats: ${response.statusText}`);
   }
 
   return response.json();

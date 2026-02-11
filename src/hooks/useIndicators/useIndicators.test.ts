@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook, waitFor } from '@testing-library/react';
 import { useIndicators } from './useIndicators';
-import * as api from '../../api/indicators';
+import * as api from '../../api';
 
 // Mock the API module
-vi.mock('../../api/indicators', () => ({
+vi.mock('../../api', () => ({
   fetchIndicators: vi.fn(),
 }));
 
