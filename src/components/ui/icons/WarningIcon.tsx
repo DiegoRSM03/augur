@@ -5,6 +5,7 @@ interface WarningIconProps {
 export function WarningIcon({ className = 'w-4 h-4' }: WarningIconProps) {
   return (
     <svg
+      aria-hidden="true"
       className={className}
       viewBox="0 0 24 24"
       fill="none"

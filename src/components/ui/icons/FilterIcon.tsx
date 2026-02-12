@@ -5,6 +5,7 @@ interface FilterIconProps {
 export function FilterIcon({ className = 'w-4 h-4' }: FilterIconProps) {
   return (
     <svg
+      aria-hidden="true"
       className={className}
       viewBox="0 0 24 24"
       fill="none"

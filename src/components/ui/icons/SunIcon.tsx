@@ -6,6 +6,7 @@ interface SunIconProps {
 export function SunIcon({ className, size = 20 }: SunIconProps) {
   return (
     <svg
+      aria-hidden="true"
       className={className}
       width={size}
       height={size}

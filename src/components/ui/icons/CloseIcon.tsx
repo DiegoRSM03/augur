@@ -6,6 +6,7 @@ interface CloseIconProps {
 export function CloseIcon({ className = 'w-5 h-5', strokeWidth = 2 }: CloseIconProps) {
   return (
     <svg
+      aria-hidden="true"
       className={className}
       viewBox="0 0 24 24"
       fill="none"

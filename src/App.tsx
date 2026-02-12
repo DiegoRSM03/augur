@@ -19,7 +19,7 @@ function App() {
         onClose={dashboard.sidebar.close}
       />
 
-      <main className="flex flex-col overflow-x-hidden">
+      <main id="main-content" className="flex flex-col overflow-x-hidden">
         <PageHeader
           title="Threat Intelligence Dashboard"
           subtitle="Real-time threat indicators and campaign intelligence"

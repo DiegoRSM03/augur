@@ -1,6 +1,7 @@
 export function AnalyticsIcon() {
   return (
     <svg
+      aria-hidden="true"
       className="w-[18px] h-[18px]"
       viewBox="0 0 24 24"
       fill="none"

@@ -37,11 +37,20 @@ export function TableRow({
     onClick(indicator.id);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTableRowElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      handleRowClick();
+    }
+  };
+
   // Row is highlighted if selected (checkbox) OR active (detail panel open)
   const isHighlighted = isSelected || isActive;
 
   return (
     <motion.tr
+      tabIndex={0}
+      aria-selected={isSelected}
       className={`
         border-b border-border-subtle
         transition-colors duration-100
@@ -49,6 +58,7 @@ export function TableRow({
         ${isHighlighted ? 'bg-augur-blue-dim' : 'hover:bg-bg-card-hover'}
       `}
       onClick={handleRowClick}
+      onKeyDown={handleKeyDown}
       initial={reducedMotion ? false : { opacity: 0, y: 4 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
@@ -64,6 +74,7 @@ export function TableRow({
           checked={isSelected}
           onChange={handleCheckboxChange}
           onClick={(e) => e.stopPropagation()}
+          aria-label={`Select indicator ${indicator.value}`}
           className="accent-augur-blue"
         />
       </td>

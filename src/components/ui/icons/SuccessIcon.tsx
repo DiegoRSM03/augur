@@ -5,6 +5,7 @@ interface SuccessIconProps {
 export function SuccessIcon({ className = 'w-5 h-5' }: SuccessIconProps) {
   return (
     <svg
+      aria-hidden="true"
       className={className}
       viewBox="0 0 24 24"
       fill="none"

@@ -79,8 +79,10 @@ export function StatsRow() {
   const animationKey = `${stats.total}-${stats.critical}-${stats.high}-${stats.medium}-${stats.low}`;
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3 px-4 py-4 sm:px-6 sm:py-5 md:px-8" key={animationKey}>
-      {cardConfigs.map((config, index) => (
+    <section aria-labelledby="stats-heading">
+      <h2 id="stats-heading" className="sr-only">Indicator Statistics</h2>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 sm:gap-3 px-4 py-4 sm:px-6 sm:py-5 md:px-8" key={animationKey}>
+        {cardConfigs.map((config, index) => (
         <motion.div
           key={config.key}
           className={`h-full ${index === 0 ? 'col-span-2 md:col-span-1' : ''}`}
@@ -101,6 +103,7 @@ export function StatsRow() {
           />
         </motion.div>
       ))}
-    </div>
+      </div>
+    </section>
   );
 }

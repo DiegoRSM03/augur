@@ -6,6 +6,7 @@ interface ChevronIconProps {
 export function ChevronIcon({ isOpen, className = 'w-4 h-4' }: ChevronIconProps) {
   return (
     <svg
+      aria-hidden="true"
       className={`transition-transform ${isOpen ? 'rotate-180' : ''} ${className}`}
       viewBox="0 0 24 24"
       fill="none"
