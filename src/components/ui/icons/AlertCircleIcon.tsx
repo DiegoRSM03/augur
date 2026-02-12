@@ -9,6 +9,7 @@ export function AlertCircleIcon({
 }: AlertCircleIconProps) {
   return (
     <svg
+      aria-hidden="true"
       className={className}
       viewBox="0 0 24 24"
       fill="none"

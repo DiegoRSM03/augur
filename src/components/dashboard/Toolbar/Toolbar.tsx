@@ -67,16 +67,19 @@ function FilterDropdowns({
         options={severityOptions}
         value={filters.severity}
         onChange={(e) => onSeverityChange(e.target.value as Severity | '')}
+        aria-label="Filter by severity"
       />
       <Select
         options={typeOptions}
         value={filters.type}
         onChange={(e) => onTypeChange(e.target.value as IndicatorType | '')}
+        aria-label="Filter by indicator type"
       />
       <Select
         options={sourceOptions}
         value={filters.source}
         onChange={(e) => onSourceChange(e.target.value)}
+        aria-label="Filter by source"
       />
     </>
   );

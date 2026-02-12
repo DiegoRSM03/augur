@@ -70,10 +70,12 @@ function IndeterminateCheckbox({
   checked,
   indeterminate,
   onChange,
+  'aria-label': ariaLabel,
 }: {
   checked: boolean;
   indeterminate: boolean;
   onChange?: () => void;
+  'aria-label'?: string;
 }) {
   const ref = React.useRef<HTMLInputElement>(null);
 
@@ -89,6 +91,7 @@ function IndeterminateCheckbox({
       type="checkbox"
       checked={checked}
       onChange={onChange}
+      aria-label={ariaLabel}
       className="accent-augur-blue cursor-pointer"
     />
   );
@@ -114,6 +117,7 @@ export function TableHeader({
             return (
               <th
                 key={column.key}
+                scope="col"
                 className="px-4 py-3 text-left border-b border-border"
                 style={{ width: column.width }}
               >
@@ -121,6 +125,7 @@ export function TableHeader({
                   checked={allSelected}
                   indeterminate={someSelected && !allSelected}
                   onChange={onSelectAll}
+                  aria-label="Select all indicators"
                 />
               </th>
             );
@@ -132,6 +137,7 @@ export function TableHeader({
           return (
             <th
               key={column.key}
+              scope="col"
               className={`
                 px-4 py-3
                 text-[10.5px] font-semibold uppercase tracking-[0.8px]

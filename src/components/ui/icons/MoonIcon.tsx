@@ -6,6 +6,7 @@ interface MoonIconProps {
 export function MoonIcon({ className, size = 20 }: MoonIconProps) {
   return (
     <svg
+      aria-hidden="true"
       className={className}
       width={size}
       height={size}

@@ -57,6 +57,17 @@
     min-height: 100vh;
   }
 
+  /* WCAG 2.1 AA: Visible focus indicators for all interactive elements */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Remove default outline when custom focus is applied via mouse */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
   /* ============================================================
      CSS VARIABLES - Dark Mode (Default)
      ============================================================ */
@@ -80,7 +91,7 @@
     /* Text hierarchy */
     --color-text-primary: #e8eaf0;
     --color-text-secondary: #8b90a0;
-    --color-text-tertiary: #5c6170;
+    --color-text-tertiary: #848a99; /* WCAG 2.1 AA compliant: ~4.6:1 contrast on dark backgrounds */
     --color-text-muted: #3e4352;
 
     /* Severity system */

@@ -54,6 +54,7 @@ export function ConfidenceBar({
           aria-valuenow={clampedValue}
           aria-valuemin={0}
           aria-valuemax={100}
+          aria-label={`Confidence: ${clampedValue}%`}
         />
       </div>
       {showValue && (

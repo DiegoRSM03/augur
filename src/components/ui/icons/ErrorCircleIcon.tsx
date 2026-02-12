@@ -5,6 +5,7 @@ interface ErrorCircleIconProps {
 export function ErrorCircleIcon({ className = 'w-5 h-5' }: ErrorCircleIconProps) {
   return (
     <svg
+      aria-hidden="true"
       className={className}
       viewBox="0 0 24 24"
       fill="none"

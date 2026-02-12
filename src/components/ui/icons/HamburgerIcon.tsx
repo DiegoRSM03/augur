@@ -5,6 +5,7 @@ interface HamburgerIconProps {
 export function HamburgerIcon({ className = 'w-5 h-5' }: HamburgerIconProps) {
   return (
     <svg
+      aria-hidden="true"
       className={className}
       viewBox="0 0 24 24"
       fill="none"

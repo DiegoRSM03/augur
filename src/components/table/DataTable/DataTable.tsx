@@ -172,10 +172,21 @@ export function DataTable({
     );
   };
 
+  const getStatusMessage = () => {
+    if (loading) return 'Loading indicators...';
+    if (error) return 'Error loading indicators';
+    return `Showing ${data.length} indicators`;
+  };
+
   return (
-    <div className="px-4 pt-3 pb-4 sm:px-6 sm:pt-4 sm:pb-5 md:px-8 md:pt-4 md:pb-6 flex-1">
+    <section aria-labelledby="indicators-heading" className="px-4 pt-3 pb-4 sm:px-6 sm:pt-4 sm:pb-5 md:px-8 md:pt-4 md:pb-6 flex-1">
+      <h2 id="indicators-heading" className="sr-only">Threat Indicators</h2>
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        {getStatusMessage()}
+      </div>
       <div className="overflow-x-auto">
         <table className="w-full border-collapse border border-border-subtle rounded-lg overflow-hidden">
+          <caption className="sr-only">Threat indicators data table with columns for indicator value, type, severity, confidence, source, tags, and last seen date</caption>
           <TableHeader
             sortConfig={sortConfig}
             onSort={onSort}
@@ -187,6 +198,6 @@ export function DataTable({
           {renderBody()}
         </table>
       </div>
-    </div>
+    </section>
   );
 }

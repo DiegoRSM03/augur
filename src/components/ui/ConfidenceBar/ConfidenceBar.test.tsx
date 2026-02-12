@@ -16,6 +16,12 @@ describe('ConfidenceBar', () => {
     expect(progressbar).toHaveAttribute('aria-valuemax', '100');
   });
 
+  it('has accessible name for progress bar', () => {
+    render(<ConfidenceBar value={75} />);
+    const progressbar = screen.getByRole('progressbar');
+    expect(progressbar).toHaveAccessibleName('Confidence: 75%');
+  });
+
   it('clamps value to 0-100 range', () => {
     const { rerender } = render(<ConfidenceBar value={150} />);
     expect(screen.getByText('100')).toBeInTheDocument();
